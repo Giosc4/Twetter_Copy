@@ -43,12 +43,5 @@
             $conn->close();
         }
 		
-        // include("db.php");
-
-		// $query = "SELECT * FROM users WHERE username='$username'";
-		// $result = mysqli_query($conn, $query);
-
-		// mysqli_close($conn);
-
 		?>
 
