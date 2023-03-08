@@ -82,7 +82,7 @@
   </form>
   <h3>I tuoi tweets</h3>
   <?php
-			include("db.php");
+        include './logic/db.php';
 
 			$sql = "SELECT * FROM tweets, users WHERE user_id = username";
 			$result = $conn->query($sql);

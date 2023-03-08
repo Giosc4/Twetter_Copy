@@ -16,44 +16,14 @@
         <p>Username: <input type="text" name="username" required></p>
         <p>Password: <input type="password" name="password" required></p>
         <p><input type="submit" name="login"></p>
-        <br><button onclick="location.href='signUp.php'">Sign Up</button>
+        
+        <!-- Check if the Username and the password are correct  -->
+        <?php include "./logic/login_func.php"; ?>
 
-
-        <!-- id	email	username	password	first_name	last_name	bio	profile_picture -->
-
-
-        <?php
-        session_start();
-        include 'db.php';
-
-        if (isset($_POST['login'])) {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-
-            $query = "SELECT * FROM users WHERE username='$username'";
-            $result = mysqli_query($conn, $query);
-
-            if ($result && mysqli_num_rows($result) == 1) {
-                $row = mysqli_fetch_assoc($result);
-
-                if (password_verify($password, $row['password'])) {
-                    $password =  $row['password'];
-                    $_SESSION['username'] = $username;
-                    header('Location: home_page.php');
-                    exit();
-                } else {
-                    echo 'Password errata';
-                }
-            }
-
-            echo 'Username o password errati';
-        }
-
-        mysqli_close($conn);
-        ?>
+        <br><button onclick="location.href='signUp.php'">Sign Up</button><br>
+        <br><button onclick="location.href='delete_users.php'">DELETE USERS</button><br>
 
     </form>
-    <br><button onclick="location.href='delete_users.php'">DELETE USERS</button><br>
 
 </body>
 
