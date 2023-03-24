@@ -7,9 +7,16 @@
 
 <body>
     <?php
-      session_start();
+    session_start();
+    if (!$_SESSION['username']) {
+        // Redirect all'area di login se l'utente non è loggato
+        header('Location: login.php');
+        exit;
+    }
+
     include("../server/functions.php");
-    createHeader();
+    // createHeader();
+    
     ?>
 
     <section>
@@ -26,8 +33,8 @@
     <section>
         <h2>Newsfeed</h2>
         <!-- Qui andranno i tweet degli account seguiti dall'utente -->
-        <?php 
-        getTweetsHome(); ?>
+        <?php
+        // getTweetsHome(); ?>
     </section>
     <section>
         <h2>Suggerimenti per nuovi account da seguire</h2>
@@ -36,7 +43,16 @@
     </section>
 
 
-    <?php footer() ?>
+    <?php
+
+
+
+    if (isset($_POST['logout'])) {
+        // gestisci il click sul pulsante Logout
+        session_start();
+        session_destroy();
+        header('Location: ../client/login.php');
+    } ?>
 
 </body>
 

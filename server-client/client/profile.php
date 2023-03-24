@@ -10,7 +10,12 @@
   <?php
   session_start();
   include("../server/functions.php");
-  createHeader();
+  if (!isset($_SESSION['username'])) {
+    // Redirect all'area di login se l'utente non è loggato
+    header('Location: start.php');
+    exit;
+ }
+  // createHeader();
   ?>
 
   <h1>Profilo utente:</h1>
@@ -43,9 +48,14 @@
 
   </form>
   <h3>I tuoi tweets</h3>
-  <?php getTweetsProfile(); ?>
+  <?php 
+  // getTweetsProfile();
+   ?>
 
-  <?php footer() ?>
+  <?php if (isset($_POST['profile'])) {
+    // gestisci il click sul pulsante Profile
+    header('Location: ../client/profile.php');
+}  ?>
 </body>
 
 </html>

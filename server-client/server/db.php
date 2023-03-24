@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "internetetoutils";
+$dbname = "twetter_copy";
 
 // Crea la connessione
 $conn = new mysqli($servername, $username, $password, $dbname);
