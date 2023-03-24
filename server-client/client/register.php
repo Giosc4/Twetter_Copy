@@ -48,7 +48,7 @@
       $last_name = $_POST['last_name'];
       $bio = $_POST['bio'];
 
-      echo $result = registerAccount($email, $username, $password, $first_name, $last_name, $bio);
+      $result = registerAccount($email, $username, $password, $first_name, $last_name, $bio);
 
       if ($result == true) {
         echo "registrazione avvenuta con successo";

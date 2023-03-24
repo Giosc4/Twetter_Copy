@@ -1,69 +1,75 @@
+<head>
+  <link rel="stylesheet" href="../server/styleHome.css">
+</head>
 <?php
-// function createHeader()
-// {
-//     $title = "
-//     <h1>My App for Tweets</h1>
-//     <h2This is my social media like Twetter </h2>";
-//     $bar = "
-//     <div style='display: inline-block; margin-right: 50px;'>
-//     <form action='../server/issets.php' method='post'>
-//     <input type='submit' name='home' value='Home'>
-//     <input type='submit' name='profile' value='Profile'>
-//     <input type='submit' name='logout' value='Logout'>
-//     </form>
-//     </div>
-//     ";
-//     echo $title;
-//     echo $bar;
-// }
 
-// function footer()
-// {
-//     echo "<footer>";
-//     echo "<p>&copy; 2023 - Giovanni Maria Savoca</p>";
-//     echo "</footer>";
-// }
+function getTweetsHomeNotMine($user)
+{
+    include("db.php");
+    
 
 
-// function getTweetsHome()
-// {
-//     include("db.php");
+    $sql = "SELECT * FROM tweets, users WHERE users.username <> '$user'";
+    $result = $conn->query($sql);
 
-//     $sql = "SELECT * FROM tweets, users WHERE user_id = username";
-//     $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            if ($row["username"] != $user) {
+                echo "<div class='tweet-container'>";
+                echo "<p class='usernameT'>" ."Username: " . $row["username"] . "</p>";
+                echo "<p class='textT'>" ."Text: " . $row["text"] . "</p>";
+                echo "<p class='created_atT'>" ."Created At: " . $row["created_at"] . "</p>";
+                echo "</div>";
+                echo "<br>";
+            }
+        }
+    } else {
+        echo "0 results";
+    }
+}
 
-//     if ($result->num_rows > 0) {
-//         while ($row = $result->fetch_assoc()) {
-//             if ($row["username"] != $_SESSION["username"]) {
-//                 echo "<div style='border: 1px solid black; padding: 10px; width: 500px;'>";
-//                 echo "Username: " . $row["username"] . "<br>Text: " . $row["text"] . "<br>Created At: " . $row["created_at"] . "<br>";
-//                 echo "</div>";
-//             }
-//         }
-//     } else {
-//         echo "0 results";
-//     }
-// }
+function getTweetsHomeMine($user)
+{
+    include("db.php");
 
-// function getTweetsProfile()
-// {
-//     include("db.php");
 
-//     $sql = "SELECT * FROM tweets, users WHERE user_id = username";
-//     $result = $conn->query($sql);
+    $sql = "SELECT * FROM tweets WHERE tweets.username = '$user'";
+    $result = $conn->query($sql);
 
-//     if ($result->num_rows > 0) {
-//         while ($row = $result->fetch_assoc()) {
-//             if ($row["username"] == $_SESSION["username"]) {
-//                 echo "<div style='border: 1px solid black; padding: 10px; width: 500px;'>";
-//                 echo "Username: " . $row["username"] . "<br>Text: " . $row["text"] . "<br>Created At: " . $row["created_at"] . "<br>";
-//                 echo "</div>";
-//             }
-//         }
-//     } else {
-//         echo "0 results";
-//     }
-// }
+    if ($result->num_rows > 0) {
+        echo " <h2>My Tweets</h2>";
+        while ($row = $result->fetch_assoc()) {
+            if ($row["username"] == $user) {
+                echo "<div class='tweet-container'>";
+                echo "<p class='usernameT'>" ."Username: " . $row["username"] . "</p>";
+                echo "<p class='textT'>" ."Text: " . $row["text"] . "</p>";
+                echo "<p class='created_atT'>" ."Created At: " . $row["created_at"] . "</p>";
+                echo "</div>";
+                echo "<br>";
+            }
+        }
+    } else {
+        echo "0 results";
+    }
+}
+
+
+function writeTweetHome($user, $text)
+{
+    include("db.php");
+    $sql = "INSERT INTO tweets (username, text) VALUES ('$user', '$text')";
+    $result = $conn->query($sql);
+
+    if (mysqli_affected_rows($conn) > 0) {
+        // Se l'inserimento dei dati è andato a buon fine, restituisci true
+        return true;
+    } else {
+        // Si è verificato un errore durante l'inserimento dei dati, restituisci un messaggio di errore
+        echo "ERRORE: durante l'inserimento dei dati ";
+    }
+
+}
+
 
 
 function registerAccount($email, $user, $password, $first_name, $last_name, $bio)
@@ -112,14 +118,33 @@ function getLogin($user, $password)
             $password = $row['password'];
             $_SESSION['username'] = $user;
             header('Location: ../client/home.php');
-            exit();
+            return;
         } else {
-            echo 'Password errata';
+            return 'Password errata';
         }
     }
 }
+?>
+<?php
 
+// function getTweetsProfile()
+// {
+//     include("db.php");
 
+//     $sql = "SELECT * FROM tweets, users WHERE user_id = username";
+//     $result = $conn->query($sql);
 
+//     if ($result->num_rows > 0) {
+//         while ($row = $result->fetch_assoc()) {
+//             if ($row["username"] == $_SESSION["username"]) {
+//                 echo "<div style='border: 1px solid black; padding: 10px; width: 500px;'>";
+//                 echo "Username: " . $row["username"] . "<br>Text: " . $row["text"] . "<br>Created At: " . $row["created_at"] . "<br>";
+//                 echo "</div>";
+//             }
+//         }
+//     } else {
+//         echo "0 results";
+//     }
+// }
 
 ?>

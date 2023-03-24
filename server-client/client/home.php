@@ -3,6 +3,7 @@
 
 <head>
     <title>Nome del social network</title>
+    <link rel="stylesheet" href="../server/styleHome.css">
 </head>
 
 <body>
@@ -15,44 +16,57 @@
     }
 
     include("../server/functions.php");
-    // createHeader();
-    
+
+    include("../server/header.php");
+
     ?>
+    <main>
+        <section class="new-tweet">
+            <form action="home.php" method="post">
+                <h2>Benvenuto
+                    <?php echo $username = $_SESSION['username']; ?>
+                </h2>
+                <section class="new-tweet">
+                    <textarea placeholder="What's happening?" name="text"></textarea>
+                    <button type="submit" name="salva">Tweet</button>
+                </section>
 
-    <section>
-        <h2>Add Tweet</h2>
-        <form action="issets.php" method="post">
-            <label for="text">Write something:</label><br>
-            <input type="text" id="text" name="text"><br>
-            <input type="submit" name="salva" value="Salva">
-
-        </form>
-
-    </section>
-
-    <section>
-        <h2>Newsfeed</h2>
-        <!-- Qui andranno i tweet degli account seguiti dall'utente -->
-        <?php
-        // getTweetsHome(); ?>
-    </section>
-    <section>
-        <h2>Suggerimenti per nuovi account da seguire</h2>
-        <H3>DA COMPLETARE</H3>
-        <!-- Qui andranno i suggerimenti per nuovi account  DA COMPLETARE-->
-    </section>
+                <section>
+                    <h2>Newsfeed</h2>
+                    <!-- Qui andranno i tweet degli account seguiti dall'utente -->
+                    <?php getTweetsHomeNotMine($username); ?>
+                </section>
+                <section>
+                    <h2>I miei Tweets</h2>
+                    <?php getTweetsHomeMine($username); ?>
+                    <br> <br>
+                    <input type='submit' name='logout' value='Logout'>
+                </section>
+            </form>
+        </section>
+    </main>
 
 
     <?php
-
-
-
     if (isset($_POST['logout'])) {
         // gestisci il click sul pulsante Logout
         session_start();
         session_destroy();
         header('Location: ../client/login.php');
-    } ?>
+    }
+    if (isset($_POST['salva'])) {
+
+        $result = writeTweetHome($username, $_POST['text']);
+        if ($result == true) {
+            echo "registrazione avvenuta con successo";
+        } else {
+            exit();
+        }
+    }
+
+    ?>
+
+    <?php include("../server/footer.php"); ?>
 
 </body>
 
