@@ -13,7 +13,7 @@
                 <ul>
                     <li><a href="#">Home</a></li>
                     <li><a href="#">Settings</a></li>
-                    <li><a href="#">Profile</a></li>
+                    <li><a href="../client/profile.php">Profile</a></li>
                 </ul>
             </nav>
             <div class="profile">

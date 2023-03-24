@@ -33,18 +33,18 @@
 
                 <section>
                     <h2>Newsfeed</h2>
-                    <!-- Qui andranno i tweet degli account seguiti dall'utente -->
                     <?php getTweetsHomeNotMine($username); ?>
                 </section>
                 <section>
                     <h2>I miei Tweets</h2>
                     <?php getTweetsHomeMine($username); ?>
-                    <br> <br>
-                    <input type='submit' name='logout' value='Logout'>
                 </section>
+                <br> <br>
+                    <input type='submit' name='logout' value='Logout'>
             </form>
         </section>
     </main>
+    <?php include("../server/footer.php"); ?>
 
 
     <?php
@@ -56,9 +56,10 @@
     }
     if (isset($_POST['salva'])) {
 
-        $result = writeTweetHome($username, $_POST['text']);
+        $result = writeTweetHome($_SESSION['username'], $_POST['text']);
         if ($result == true) {
-            echo "registrazione avvenuta con successo";
+
+            header('Location: ../client/home.php');
         } else {
             exit();
         }
@@ -66,7 +67,7 @@
 
     ?>
 
-    <?php include("../server/footer.php"); ?>
+
 
 </body>
 

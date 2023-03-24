@@ -1,24 +1,111 @@
 <head>
-  <link rel="stylesheet" href="../server/styleHome.css">
+    <link rel="stylesheet" href="../server/styleHome.css">
 </head>
 <?php
+
+
+
+function getDataUtente($user)
+{
+    include("db.php");
+
+    $sql = "SELECT * FROM users WHERE username = '$user'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        echo " <h2>Dati utente " . $user . "</h2>";
+        while ($row = $result->fetch_assoc()) {
+            if ($row["username"] == $user) {
+
+                echo "<ul>";
+                echo "<li><strong>Nome:</strong> " . $row["first_name"] . "</li>";
+                echo "<li><strong>Cognome:</strong> " . $row["last_name"] . "</li>";
+                echo "<li><strong>Email:</strong> " . $row["email"] . "</li>";
+                echo "<li><strong>Bio:</strong> " . $row["bio"] . "</li>";
+                echo "</ul>";
+
+                return true;
+            }
+        }
+    } else {
+        echo "0 results";
+        return false;
+    }
+
+}
+
+function updateDataUtente($first_name, $last_name, $email, $user, $password, $bio)
+{
+    include("db.php");
+
+    // Verifica se il nuovo username esiste già nel database
+    $sql = "SELECT * FROM users WHERE username = '$user'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        echo "Username già esistente";
+        return true;
+    } else {
+        while ($row = $result->fetch_assoc()) {
+            if ($first_name == "") {
+                $first_name = $row["first_name"];
+            }
+            if ($last_name == "") {
+                $last_name = $row["last_name"];
+            }
+            if ($email == "") {
+                $email = $row["email"];
+            }
+            if ($password == "") {
+                $password = $row["password"];
+            }
+            if ($bio == "") {
+                $bio = $row["bio"];
+            }
+        }
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+        // Aggiorna i dati utente nella tabella users
+        $sql = "UPDATE users SET first_name='$first_name', last_name='$last_name', email='$email', password='$password_hash', bio='$bio' WHERE username='$oldUsername'";
+        $result = $conn->query($sql);
+
+        if (mysqli_affected_rows($conn) > 0) {
+            $_SESSION['username'] = $user;
+            header('Location: ../client/profile.php');
+            exit;
+        } else {
+            // Si è verificato un errore durante l'aggiornamento dei dati, restituisci un messaggio di errore
+            echo "ERRORE: durante l'aggiornamento dei dati";
+            exit;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 function getTweetsHomeNotMine($user)
 {
     include("db.php");
-    
 
-
-    $sql = "SELECT * FROM tweets, users WHERE users.username <> '$user'";
+    $sql = "SELECT * FROM tweets, users WHERE tweets.username <> '$user'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             if ($row["username"] != $user) {
                 echo "<div class='tweet-container'>";
-                echo "<p class='usernameT'>" ."Username: " . $row["username"] . "</p>";
-                echo "<p class='textT'>" ."Text: " . $row["text"] . "</p>";
-                echo "<p class='created_atT'>" ."Created At: " . $row["created_at"] . "</p>";
+                echo "<p class='usernameT'>" . "Username: " . $row["username"] . "</p>";
+                echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
+                echo "<p class='created_atT'>" . "Created At: " . $row["created_at"] . "</p>";
                 echo "</div>";
                 echo "<br>";
             }
@@ -32,7 +119,6 @@ function getTweetsHomeMine($user)
 {
     include("db.php");
 
-
     $sql = "SELECT * FROM tweets WHERE tweets.username = '$user'";
     $result = $conn->query($sql);
 
@@ -41,9 +127,9 @@ function getTweetsHomeMine($user)
         while ($row = $result->fetch_assoc()) {
             if ($row["username"] == $user) {
                 echo "<div class='tweet-container'>";
-                echo "<p class='usernameT'>" ."Username: " . $row["username"] . "</p>";
-                echo "<p class='textT'>" ."Text: " . $row["text"] . "</p>";
-                echo "<p class='created_atT'>" ."Created At: " . $row["created_at"] . "</p>";
+                echo "<p class='usernameT'>" . "Username: " . $row["username"] . "</p>";
+                echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
+                echo "<p class='created_atT'>" . "Created At: " . $row["created_at"] . "</p>";
                 echo "</div>";
                 echo "<br>";
             }
@@ -52,7 +138,6 @@ function getTweetsHomeMine($user)
         echo "0 results";
     }
 }
-
 
 function writeTweetHome($user, $text)
 {
@@ -67,10 +152,7 @@ function writeTweetHome($user, $text)
         // Si è verificato un errore durante l'inserimento dei dati, restituisci un messaggio di errore
         echo "ERRORE: durante l'inserimento dei dati ";
     }
-
 }
-
-
 
 function registerAccount($email, $user, $password, $first_name, $last_name, $bio)
 {
@@ -97,12 +179,8 @@ function registerAccount($email, $user, $password, $first_name, $last_name, $bio
             // Si è verificato un errore durante l'inserimento dei dati, restituisci un messaggio di errore
             echo "ERRORE: durante l'inserimento dei dati ";
         }
-
     }
 }
-
-
-
 
 function getLogin($user, $password)
 {
@@ -124,27 +202,4 @@ function getLogin($user, $password)
         }
     }
 }
-?>
-<?php
-
-// function getTweetsProfile()
-// {
-//     include("db.php");
-
-//     $sql = "SELECT * FROM tweets, users WHERE user_id = username";
-//     $result = $conn->query($sql);
-
-//     if ($result->num_rows > 0) {
-//         while ($row = $result->fetch_assoc()) {
-//             if ($row["username"] == $_SESSION["username"]) {
-//                 echo "<div style='border: 1px solid black; padding: 10px; width: 500px;'>";
-//                 echo "Username: " . $row["username"] . "<br>Text: " . $row["text"] . "<br>Created At: " . $row["created_at"] . "<br>";
-//                 echo "</div>";
-//             }
-//         }
-//     } else {
-//         echo "0 results";
-//     }
-// }
-
 ?>
