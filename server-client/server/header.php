@@ -1,5 +1,5 @@
 <head>
-    <link rel="stylesheet" href="../server/header.css">
+    <link rel="stylesheet" href="../server/style/header.css">
 </head>
 
 <body>
@@ -11,7 +11,7 @@
         </div>
         <nav>
             <ul>
-                <li><a href="#">Home</a></li>
+                <li><a href="../client/home.php">Home</a></li>
                 <li><a href="#">Settings</a></li>
                 <li><a href="../client/profile.php">Profile</a></li>
             </ul>
@@ -19,7 +19,7 @@
         <div class="profile">
             <img id="imgLogo" src="profile-pic.jpg" alt="Profile Picture" width="50" height="50">
             <!-- <p>Username</p> -->
-            <form action="./server/header.php" method="post">
+            <form action="../server/header.php" method="post">
                 <input type='submit' name='logout' value='Logout'>
             </form>
         </div>
@@ -27,7 +27,7 @@
             // gestisci il click sul pulsante Logout
             session_start();
             session_destroy();
-            header('Location: ./client/login.php');
+            header('Location: ../client/login.php');
         } ?>
     </header>
 </body>

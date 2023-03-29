@@ -3,6 +3,7 @@
 
 <head>
   <title>Registrazione utente</title>
+  <link rel="stylesheet" href="../server/register.css">
 </head>
 
 <body>
@@ -15,26 +16,26 @@
     include_once('../server/functions.php');
     ?>
 
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
+    <label>Email:</label>
+    <input type="email" name="email" required>
 
-    <label>Username:</label><br>
-    <input type="text" name="username" required><br><br>
+    <label>Username:</label>
+    <input type="text" name="username" required>
 
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
+    <label>Password:</label>
+    <input type="password" name="password" required>
 
-    <label>First name:</label><br>
-    <input type="text" name="first_name" required><br><br>
+    <label>First name:</label>
+    <input type="text" name="first_name" required>
 
-    <label>Last name:</label><br>
-    <input type="text" name="last_name" required><br><br>
+    <label>Last name:</label>
+    <input type="text" name="last_name" required>
 
-    <label>Bio:</label><br>
-    <textarea name="bio"></textarea><br><br>
+    <label>Bio:</label>
+    <textarea name="bio"></textarea>
 
-    <input type="submit" name='register' value="Registrati">
-    <br><input type='submit' name='login' value='Login'><br>
+    <input type="submit" name='register' value="Registrati"> <br> <hr>
+    <input type='submit' name='login' value='Login'>
 
     <?php
     if (isset($_POST['register'])) {

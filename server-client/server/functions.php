@@ -1,5 +1,5 @@
 <head>
-    <link rel="stylesheet" href="../server/styleHome.css">
+    <link rel="stylesheet" href="../server/style/home.css">
 </head>
 <?php
 
@@ -81,22 +81,30 @@ function updateDataUtente($first_name, $last_name, $email, $user, $password, $bi
 }
 
 
+function isAdmin($user)
+{
+    include("db.php");
 
 
+    $sql = "SELECT users.isAdmin FROM users WHERE users.username = '$user'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            if ($row["isAdmin"] == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
-
-
-
-
-
-
-
+}
 
 function getTweetsHomeNotMine($user)
 {
     include("db.php");
 
-    $sql = "SELECT * FROM tweets, users WHERE tweets.username <> '$user'";
+    $sql = "SELECT * FROM tweets WHERE tweets.username <> '$user'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -106,8 +114,12 @@ function getTweetsHomeNotMine($user)
                 echo "<p class='usernameT'>" . "Username: " . $row["username"] . "</p>";
                 echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
                 echo "<p class='created_atT'>" . "Created At: " . $row["created_at"] . "</p>";
-                echo "</div>";
-                echo "<br>";
+                echo "<form action='home.php' method='post'>";
+                if (isAdmin($user)) {
+                    echo "<button type='submit' class='delete-button' name='deleteTweet' value='" . $row['tweet_id'] . "'>Delete</button>";
+                }
+                echo "</form></div>";
+                echo "<br> <hr>";
             }
         }
     } else {
@@ -122,26 +134,38 @@ function getTweetsHomeMine($user)
     $sql = "SELECT * FROM tweets WHERE tweets.username = '$user'";
     $result = $conn->query($sql);
 
+    $wantDelate;
+
     if ($result->num_rows > 0) {
-        echo " <h2>My Tweets</h2>";
         while ($row = $result->fetch_assoc()) {
             if ($row["username"] == $user) {
                 echo "<div class='tweet-container'>";
                 echo "<p class='usernameT'>" . "Username: " . $row["username"] . "</p>";
                 echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
                 echo "<p class='created_atT'>" . "Created At: " . $row["created_at"] . "</p>";
-                echo "</div>";
-                echo "<br>";
+                echo "<form action='home.php' method='post'>";
+                if (isAdmin($user)) {
+                    echo "<button type='submit' class='delete-button' name='deleteTweet' value='" . $row['tweet_id'] . "'>Delete</button>";
+                }
+                echo "</form></div>";
+                echo "<br> <hr>";
             }
         }
+        
     } else {
         echo "0 results";
     }
 }
 
+
+
+
+
 function writeTweetHome($user, $text)
 {
     include("db.php");
+    $user = mysqli_real_escape_string($conn, $user);
+    $text = mysqli_real_escape_string($conn, $text);
     $sql = "INSERT INTO tweets (username, text) VALUES ('$user', '$text')";
     $result = $conn->query($sql);
 

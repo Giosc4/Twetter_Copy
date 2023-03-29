@@ -14,6 +14,7 @@
         header('Location: login.php');
         exit;
     }
+    
 
     include("../server/functions.php");
 
@@ -30,7 +31,7 @@
                     </h2>
                     <div class="tweet-form">
                         <textarea placeholder="What's happening?" name="text"></textarea>
-                        <button type="submit" name="salva">Tweet</button>
+                        <button type="submit" name="tweet">Tweet</button>
                     </div>
                 </form>
             </section>
@@ -46,8 +47,10 @@
 
             <section>
                 <div class="tweet-list">
-                    <h2>I miei Tweets</h2>
-                    <?php getTweetsHomeMine($username); ?>
+                    <h2>my Tweets</h2>
+                    <div class="listTweet">
+                        <?php getTweetsHomeMine($username); ?>
+                    </div>
                 </div>
             </section>
 
@@ -64,14 +67,27 @@
         session_destroy();
         header('Location: ../client/login.php');
     }
-    if (isset($_POST['salva'])) {
+    if (isset($_POST['tweet'])) {
 
-        $result = writeTweetHome($_SESSION['username'], $_POST['text']);
+        $result = writeTweetHome($username, $_POST['text']);
         if ($result == true) {
 
             header('Location: ../client/home.php');
         } else {
             exit();
+        }
+    }
+
+    include("../server/db.php");
+
+    if (isset($_POST['deleteTweet'])) {
+        $tweetId = $_POST['deleteTweet'];
+        $sql = "DELETE FROM tweets WHERE tweet_id = '$tweetId'";
+        $result = $conn->query($sql);
+        if ($result) {
+            header('Location: ../client/home.php');
+        } else {
+            echo "ERRORE: durante l'eliminazione del tweet";
         }
     }
 
