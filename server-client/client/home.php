@@ -3,7 +3,7 @@
 
 <head>
     <title>Nome del social network</title>
-    <link rel="stylesheet" href="../server/styleHome.css">
+    <link rel="stylesheet" href="server-client/server/styleHome.css">
 </head>
 
 <body>
@@ -21,29 +21,39 @@
 
     ?>
     <main>
-        <section class="new-tweet">
-            <form action="home.php" method="post">
-                <h2>Benvenuto
-                    <?php echo $username = $_SESSION['username']; ?>
-                </h2>
-                <section class="new-tweet">
-                    <textarea placeholder="What's happening?" name="text"></textarea>
-                    <button type="submit" name="salva">Tweet</button>
-                </section>
+        <div class="container">
 
-                <section>
+            <section class="new-tweet">
+                <form action="home.php" method="post">
+                    <h2>Benvenuto
+                        <?php echo $username = $_SESSION['username']; ?>
+                    </h2>
+                    <div class="tweet-form">
+                        <textarea placeholder="What's happening?" name="text"></textarea>
+                        <button type="submit" name="salva">Tweet</button>
+                    </div>
+                </form>
+            </section>
+
+            <section>
+                <div class="tweet-list">
                     <h2>Newsfeed</h2>
-                    <?php getTweetsHomeNotMine($username); ?>
-                </section>
-                <section>
+                    <div class="listTweet">
+                        <?php getTweetsHomeNotMine($username); ?>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="tweet-list">
                     <h2>I miei Tweets</h2>
                     <?php getTweetsHomeMine($username); ?>
-                </section>
-                <br> <br>
-                    <input type='submit' name='logout' value='Logout'>
-            </form>
-        </section>
+                </div>
+            </section>
+
+        </div>
     </main>
+
     <?php include("../server/footer.php"); ?>
 
 
