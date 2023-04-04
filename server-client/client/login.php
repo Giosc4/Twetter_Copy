@@ -3,7 +3,7 @@
 
 <head>
     <title>Titolo della pagina</title>
-    <link rel="stylesheet" href="../server/styleLogin.css">
+    <link rel="stylesheet" href="../server/style/login.css">
 
 </head>
 
@@ -14,36 +14,37 @@ include("../server/functions.php");
 ?>
 
 <body>
+<h1>LOGIN</h1>
+
     <div class="login-form">
         <form action="../client/login.php" method="post">
             <br>Username: <input type='text' name='username'><br>
             <br>Password: <input type='password' name='password'><br>
-            <br><input type='submit' name='login' value='Login'><br>
-            <br><input type='submit' name='createAccount' value="Create Account"><br>
-            <?php if (isset($_POST['login'])) {
-
-                $username = $_POST['username'];
-                $password = $_POST['password'];
-
-                $resutl = getLogin($username, $password);
-                if ($resutl == true) {
-                    header('Location: home.php');
-                    exit;
-                } else {
-                    echo "Login fallito";
-                }
-
-            }
-
-            if (isset($_POST['createAccount'])) {
-                header('Location: register.php');
-                exit;
-            }
-            ?>
+            <br><button name='login'>Login</button><br><hr>
+            <br><button name='createAccount'>Create Account</button><br>
         </form>
     </div>
-</body>
+</body> 
 
+<?php if (isset($_POST['login'])) {
 
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $resutl = getLogin($username, $password);
+    if ($resutl == true) {
+        header('Location: home.php');
+        exit;
+    } else {
+        echo "Login fallito";
+    }
+
+}
+
+if (isset($_POST['createAccount'])) {
+    header('Location: register.php');
+    exit;
+}
+?>
 
 </html>

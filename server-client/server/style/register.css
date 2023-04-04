@@ -2,6 +2,7 @@ body {
     font-family: "Novecento", sans-serif;
     margin: 0;
     padding: 0;
+    background-color: lightblue;   
 }
 
 h1 {
@@ -13,23 +14,29 @@ form {
     max-width: 500px;
     margin: 50px auto;
     padding: 20px;
-    border: 1px solid #ccc;
+    border: 2px solid black;
+
 }
 
 label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 2px;
+    margin-top: 8px;
+    width: 90%;
+
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-textarea {
+button {
+    background-color: darkblue;
+    color: white; 
     width: 90%;
     padding: 10px;
     margin-bottom: 20px;
 }
 
-input[type="submit"] {
-    padding: 10px 20px;
+input {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: lightcyan;
 }

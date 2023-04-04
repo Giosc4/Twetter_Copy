@@ -7,7 +7,7 @@
         <!-- <h1>TITOLO DEL SOCIAL</h1> -->
 
         <div class="logo">
-            <img src="C:/xampp/htdocs/Twetter_Copy/server-client/server/logo.png" alt="Twitter Logo">
+            <img src="../server/img/OIP.jpeg" alt="Twitter Logo">
         </div>
         <nav>
             <ul>
@@ -17,7 +17,7 @@
             </ul>
         </nav>
         <div class="profile">
-            <img id="imgLogo" src="profile-pic.jpg" alt="Profile Picture" width="50" height="50">
+            <img id="imgLogo" src="../server/img/profile-pic.jpg" alt="Profile Picture" width="50" height="50">
             <!-- <p>Username</p> -->
             <form action="../server/header.php" method="post">
                 <input type='submit' name='logout' value='Logout'>

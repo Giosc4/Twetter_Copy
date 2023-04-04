@@ -3,20 +3,20 @@
 
 <head>
   <title>Profilo utente</title>
-  <link rel="stylesheet" href="../server/styleProfile.css">
+  <link rel="stylesheet" href="../server/style/profile.css">
 </head>
 
 <body>
 
   <?php
   session_start();
-  include("../server/functions.php");
+  include_once("../server/functions.php");
   if (!isset($_SESSION['username'])) {
     // Redirect all'area di login se l'utente non è loggato
     header('Location: start.php');
     exit;
   }
-  include("../server/header.php");
+  include_once("../server/header.php");
 
   ?>
   <div class="wrapper">
@@ -71,7 +71,7 @@
     ?>
 
   </div>
-  <?php include("../server/footer.php"); ?>
+  <?php include_once("../server/footer.php"); ?>
 
 </body>
 

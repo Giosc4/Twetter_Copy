@@ -3,7 +3,7 @@
 
 <head>
     <title>Nome del social network</title>
-    <link rel="stylesheet" href="server-client/server/styleHome.css">
+    <link rel="stylesheet" href="../server/style/home.css">
 </head>
 
 <body>

@@ -3,7 +3,7 @@
 
 <head>
   <title>Registrazione utente</title>
-  <link rel="stylesheet" href="../server/register.css">
+  <link rel="stylesheet" href="../server/style/register.css">
 </head>
 
 <body>
@@ -13,29 +13,35 @@
     <?php
     session_start();
 
-    include_once('../server/functions.php');
+    include('../server/functions.php');
     ?>
 
-    <label>Email:</label>
-    <input type="email" name="email" required>
+    <div class="registerDiv">
 
-    <label>Username:</label>
-    <input type="text" name="username" required>
+      <label>Email:</label>
+      <input type="email" name="email">
 
-    <label>Password:</label>
-    <input type="password" name="password" required>
+      <label>Username:</label>
+      <input type="text" name="username">
 
-    <label>First name:</label>
-    <input type="text" name="first_name" required>
+      <label>Password:</label>
+      <input type="password" name="password">
 
-    <label>Last name:</label>
-    <input type="text" name="last_name" required>
+      <label>First name:</label>
+      <input type="text" name="first_name">
 
-    <label>Bio:</label>
-    <textarea name="bio"></textarea>
+      <label>Last name:</label>
+      <input type="text" name="last_name">
 
-    <input type="submit" name='register' value="Registrati"> <br> <hr>
-    <input type='submit' name='login' value='Login'>
+      <label>Bio:</label>
+      <input type="text" name="bio"> <br>
+
+      <br><button name='register'> Registrati</button>
+
+      <hr>
+
+    </div>
+    <button name='login'> Login</button>
 
     <?php
     if (isset($_POST['register'])) {
