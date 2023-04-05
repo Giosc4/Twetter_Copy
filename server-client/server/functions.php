@@ -1,9 +1,8 @@
 <head>
-    <link rel="stylesheet" href="../server/style/home.css">
+    <link rel="stylesheet" href="../server/style/functions.css">
 </head>
+
 <?php
-
-
 
 function getDataUtente($user)
 {
@@ -41,44 +40,40 @@ function updateDataUtente($first_name, $last_name, $email, $user, $password, $bi
     // Verifica se il nuovo username esiste già nel database
     $sql = "SELECT * FROM users WHERE username = '$user'";
     $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        echo "Username già esistente";
-        return true;
-    } else {
-        while ($row = $result->fetch_assoc()) {
-            if ($first_name == "") {
-                $first_name = $row["first_name"];
-            }
-            if ($last_name == "") {
-                $last_name = $row["last_name"];
-            }
-            if ($email == "") {
-                $email = $row["email"];
-            }
-            if ($password == "") {
-                $password = $row["password"];
-            }
-            if ($bio == "") {
-                $bio = $row["bio"];
-            }
+
+    while ($row = $result->fetch_assoc()) {
+        if ($first_name == "") {
+            $first_name = $row["first_name"];
         }
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
-
-        // Aggiorna i dati utente nella tabella users
-        $sql = "UPDATE users SET first_name='$first_name', last_name='$last_name', email='$email', password='$password_hash', bio='$bio' WHERE username='$oldUsername'";
-        $result = $conn->query($sql);
-
-        if (mysqli_affected_rows($conn) > 0) {
-            $_SESSION['username'] = $user;
-            header('Location: ../client/profile.php');
-            exit;
-        } else {
-            // Si è verificato un errore durante l'aggiornamento dei dati, restituisci un messaggio di errore
-            echo "ERRORE: durante l'aggiornamento dei dati";
-            exit;
+        if ($last_name == "") {
+            $last_name = $row["last_name"];
+        }
+        if ($email == "") {
+            $email = $row["email"];
+        }
+        if ($password == "") {
+            $password = password_hash($row["password"], PASSWORD_DEFAULT);
+        }
+        if ($bio == "") {
+            $bio = $row["bio"];
         }
     }
+
+    // Aggiorna i dati utente nella tabella users
+    $sql = "UPDATE users SET first_name='$first_name', last_name='$last_name', email='$email', password='$password', bio='$bio' WHERE username='$user'";
+    $result = $conn->query($sql);
+
+    if (mysqli_affected_rows($conn) > 0) {
+        $_SESSION['username'] = $user;
+        header('Location: ../client/home.php');
+        exit;
+    } else {
+        // Si è verificato un errore durante l'aggiornamento dei dati, restituisci un messaggio di errore
+        echo "ERRORE: durante l'aggiornamento dei dati";
+        exit;
+    }
 }
+
 
 
 function isAdmin($user)
@@ -151,15 +146,11 @@ function getTweetsHomeMine($user)
                 echo "<br> <hr>";
             }
         }
-        
+
     } else {
         echo "0 results";
     }
 }
-
-
-
-
 
 function writeTweetHome($user, $text)
 {
@@ -170,10 +161,8 @@ function writeTweetHome($user, $text)
     $result = $conn->query($sql);
 
     if (mysqli_affected_rows($conn) > 0) {
-        // Se l'inserimento dei dati è andato a buon fine, restituisci true
         return true;
     } else {
-        // Si è verificato un errore durante l'inserimento dei dati, restituisci un messaggio di errore
         echo "ERRORE: durante l'inserimento dei dati ";
     }
 }
@@ -182,7 +171,6 @@ function registerAccount($email, $user, $password, $first_name, $last_name, $bio
 {
     include("db.php");
 
-    // Verifica se l'username esiste già nel database
     $sql = "SELECT * FROM users WHERE username='$user'";
     $result = $conn->query($sql);
 
@@ -200,7 +188,6 @@ function registerAccount($email, $user, $password, $first_name, $last_name, $bio
             header('Location: ../client/home.php');
             return true;
         } else {
-            // Si è verificato un errore durante l'inserimento dei dati, restituisci un messaggio di errore
             echo "ERRORE: durante l'inserimento dei dati ";
         }
     }
@@ -217,13 +204,72 @@ function getLogin($user, $password)
         $row = $result->fetch_assoc();
 
         if (password_verify($password, $row['password'])) {
-            $password = $row['password'];
             $_SESSION['username'] = $user;
             header('Location: ../client/home.php');
-            return;
+            exit;
         } else {
-            return 'Password errata';
+            echo 'Password errata';
+            // sleep(1);
+            // header("Location: login.php");
+            exit;
+        }
+    } else {
+        echo "Username non esistente";
+        exit;
+    }
+}
+
+function deleteAccount($username)
+{
+    include("db.php");
+
+    $sql = "DELETE FROM users WHERE username='$username'";
+    $result = $conn->query($sql);
+    echo $result;
+    if (mysqli_affected_rows($conn) > 0) {
+        echo "Account eliminato";
+        // header("Location: login.php");
+        exit;
+    } else {
+        echo "Errore durante l'eliminazione dell'account";
+        exit;
+    }
+}
+
+
+
+function getMyFollower($username)
+{
+    include("db.php");
+    $sql = "SELECT friend_id FROM follows WHERE user_id='$username'";
+
+    $result = $conn->query($sql);
+
+    $followers = array();
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $followers[] = $row["follower"];
         }
     }
+    return $followers;
+}
+
+function getMyFollowed($username)
+{
+    include("db.php");
+
+    $sql = "SELECT friend_id FROM follows WHERE friend_id='$username'";
+
+    // Esecuzione della query
+    $result = $conn->query($sql);
+
+    // Recupero dei dati e restituzione
+    $followed = array();
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $followed[] = $row["followed"];
+        }
+    }
+    return $followed;
 }
 ?>

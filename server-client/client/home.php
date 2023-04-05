@@ -14,7 +14,7 @@
         header('Location: login.php');
         exit;
     }
-    
+
 
     include("../server/functions.php");
 

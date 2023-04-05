@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Mar 29, 2023 alle 17:53
+-- Creato il: Apr 05, 2023 alle 19:00
 -- Versione del server: 10.4.27-MariaDB
 -- Versione PHP: 8.2.0
 
@@ -24,12 +24,12 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `followers`
+-- Struttura della tabella `follows`
 --
 
-CREATE TABLE `followers` (
-  `follower_id` varchar(255) NOT NULL,
-  `followed_id` varchar(255) NOT NULL
+CREATE TABLE `follows` (
+  `user_id` int(11) NOT NULL,
+  `friend_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -61,9 +61,7 @@ CREATE TABLE `tweets` (
 --
 
 INSERT INTO `tweets` (`tweet_id`, `username`, `text`, `created_at`) VALUES
-(19, '1', 'ciao\r\n', '2023-03-29 15:37:20'),
-(20, '1', 'oggi c\'è una bella giornata', '2023-03-29 15:50:04'),
-(21, '2', 'non c\'è una bella giornata', '2023-03-29 15:51:58');
+(26, '1', 'ciao,  io sono l\'utente 1\r\n', '2023-04-05 16:58:46');
 
 -- --------------------------------------------------------
 
@@ -86,21 +84,18 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`email`, `username`, `password`, `first_name`, `last_name`, `bio`, `isAdmin`) VALUES
-('1@1', '1', '$2y$10$giKz7dcOpoQKaJxQxJindutdrs2m.GkKUaqpxdow/aGC8kzqb4kKy', '1', '1', '1', 1),
-('2@2', '2', '$2y$10$Ni9.XmnByMY0QA./TdVsDuQyjopsNPk/hqt2WgZYWYspGhrGb.AFm', '2', '2', '', 0),
-('3@3', '3', '$2y$10$.pBKLU2E3BmsllIHysUOJeYgGkqfA2mVwsY3oEX.IltWLZW3b5Q9y', '3', '3', '', 0),
-('cris@ds', 'cris99', '$2y$10$k8zolFsjSNw.GaEyiPBtx.c41fdHZlS5xXaFtvS.HW6dS5Pl/EQqm', 'Cris', 'Chiaro', 'Ciao sono una banana', 0);
+('1@1', '1', '$2y$10$EHM4at3hDJXOfZ/leW3NFuXqqfY9aqLjd0N.8C.3EKxZcm7QbkCb.', '1', '1', '1', 0),
+('gg@g', 'g', '$2y$10$LQQguvA/NJaA7q4XiDHD2.CKRwyXlBpc3He7XYVo.JQDrXFnLMx/.', 'gg', 'gg', 'gg', 1);
 
 --
 -- Indici per le tabelle scaricate
 --
 
 --
--- Indici per le tabelle `followers`
+-- Indici per le tabelle `follows`
 --
-ALTER TABLE `followers`
-  ADD PRIMARY KEY (`follower_id`,`followed_id`),
-  ADD KEY `followed_id` (`followed_id`);
+ALTER TABLE `follows`
+  ADD PRIMARY KEY (`user_id`,`friend_id`);
 
 --
 -- Indici per le tabelle `likes`
@@ -114,7 +109,7 @@ ALTER TABLE `likes`
 --
 ALTER TABLE `tweets`
   ADD PRIMARY KEY (`tweet_id`),
-  ADD KEY `user_id` (`username`);
+  ADD KEY `tweets_ibfk_1` (`username`);
 
 --
 -- Indici per le tabelle `users`
@@ -130,18 +125,11 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT per la tabella `tweets`
 --
 ALTER TABLE `tweets`
-  MODIFY `tweet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `tweet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Limiti per le tabelle scaricate
 --
-
---
--- Limiti per la tabella `followers`
---
-ALTER TABLE `followers`
-  ADD CONSTRAINT `followers_ibfk_1` FOREIGN KEY (`follower_id`) REFERENCES `users` (`username`),
-  ADD CONSTRAINT `followers_ibfk_2` FOREIGN KEY (`followed_id`) REFERENCES `users` (`username`);
 
 --
 -- Limiti per la tabella `likes`
@@ -154,7 +142,7 @@ ALTER TABLE `likes`
 -- Limiti per la tabella `tweets`
 --
 ALTER TABLE `tweets`
-  ADD CONSTRAINT `tweets_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`);
+  ADD CONSTRAINT `tweets_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

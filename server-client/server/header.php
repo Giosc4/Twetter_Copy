@@ -7,7 +7,10 @@
         <!-- <h1>TITOLO DEL SOCIAL</h1> -->
 
         <div class="logo">
-            <img src="../server/img/OIP.jpeg" alt="Twitter Logo">
+            <a href="../client/home.php">
+                <img src="../server/img/OIP.jpeg" alt="Twitter Logo">
+            </a>
+
         </div>
         <nav>
             <ul>
@@ -20,7 +23,7 @@
             <img id="imgLogo" src="../server/img/profile-pic.jpg" alt="Profile Picture" width="50" height="50">
             <!-- <p>Username</p> -->
             <form action="../server/header.php" method="post">
-                <input type='submit' name='logout' value='Logout'>
+                <input type='submit' class="logout-btn" name='logout' value='Logout'>
             </form>
         </div>
         <?php if (isset($_POST['logout'])) {

@@ -2,16 +2,34 @@ body {
     font-family: "Novecento", sans-serif;
     margin: 0;
     padding: 0;
+    padding-bottom: 50px;
+
 }
 
 .wrapper {
     display: flex;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
 }
 
-.boxProfile{
+.editMyProfile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #f1f1f1;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 1);
+}
+
+
+
+.boxProfile {
     display: flex;
     flex-direction: column;
-    background-color: #f1f1f1;
+    background-color: #FFFFFF;
     padding: 20px;
     margin: 20px;
     border-radius: 5px;
@@ -37,16 +55,17 @@ body {
 
 .profile-display li {
     margin-bottom: 10px;
+    padding: 10px;
 }
 
 .profile-display li strong {
     display: inline-block;
-    /* width: 100px; */
+    width: 100px;
 }
 
 .profile-edit {
     flex: 1;
-    background-color: #fff;
+    background-color: #FFFFFF;
     padding: 20px;
 }
 
@@ -73,13 +92,14 @@ body {
 
 .profile-edit input[type="submit"] {
     background-color: #55acee;
-    color: #fff;
+    color: #FFFFFF;
     border: none;
     border-radius: 5px;
     padding: 10px;
     cursor: pointer;
     margin-top: 10px;
 }
+
 .tweet-list {
     background-color: #FFFFFF;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
@@ -90,4 +110,24 @@ body {
 .tweet-list article {
     display: flex;
     margin-bottom: 1rem;
+}
+
+
+.followers-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #FFFFFF;
+}
+
+.followers-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    vertical-align: top;
+}
+
+.followers-table h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #55acee;
 }

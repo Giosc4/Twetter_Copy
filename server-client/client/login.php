@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
 
+<!-- 
+    COSE DA FARE:
+        - Aggiungere una barra di ricerca di tweet
+        - Aggiungere una tabella per seguire gli utenti
+        - non funziona il pulsante elimina utente
+        
+ -->
+
+
+
 <head>
     <title>Titolo della pagina</title>
     <link rel="stylesheet" href="../server/style/login.css">
@@ -14,17 +24,23 @@ include("../server/functions.php");
 ?>
 
 <body>
-<h1>LOGIN</h1>
+    <div class="loginClass">
+        <h1>LOGIN</h1>
 
-    <div class="login-form">
-        <form action="../client/login.php" method="post">
-            <br>Username: <input type='text' name='username'><br>
-            <br>Password: <input type='password' name='password'><br>
-            <br><button name='login'>Login</button><br><hr>
-            <br><button name='createAccount'>Create Account</button><br>
-        </form>
+        <div class="login-form">
+            <form action="../client/login.php" method="post">
+                <br>Username: <input type='text' name='username'><br>
+                <br>Password: <input type='password' name='password'><br>
+                <br><button name='login'>Login</button><br>
+
+                <br>
+                <hr><button name='createAccount'>Create Account</button><br>
+            </form>
+        </div>
     </div>
-</body> 
+    <?php include_once("../server/footer.php"); ?>
+
+</body>
 
 <?php if (isset($_POST['login'])) {
 
@@ -36,12 +52,14 @@ include("../server/functions.php");
         header('Location: home.php');
         exit;
     } else {
-        echo "Login fallito";
+        echo "<p class='errorLogin'> Login fallito <p>";
+        exit;
     }
 
 }
 
 if (isset($_POST['createAccount'])) {
+    echo "account ";
     header('Location: register.php');
     exit;
 }
