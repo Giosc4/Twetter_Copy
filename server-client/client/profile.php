@@ -73,6 +73,7 @@
             </tr>
           </table>
         </li>
+        <br>
         <li>
           <div class="tweet-list">
             <h2>I miei Tweets</h2>
@@ -87,23 +88,24 @@
 
                 <!-- lista dei follower -->
                 <h3>My follower</h3>
-                <?php getMyFollower($username); ?>
+                <?php getMyFollowers($username); ?>
               </td>
               <td>
 
                 <!-- lista dei followed -->
                 <h3>My Followed</h3>
-                <?php getMyFollowed($username); ?>
+                <?php getMyFollowing($username); ?>
               </td>
 
             </tr>
 
           </table>
         </li>
+        <br>
         <li>
           <form action="profile.php" method="post">
-            <input type="submit" name="deleteAccount" value="Delete account"
-              onclick="return confirm('Sei sicuro di voler eliminare il tuo account?')">
+            <input type="submit" name="deleteAccount" class="deleteAccount" value="Delete account"
+              onclick="return confirm('Are you sure you want to delete your account?')">
           </form>
         </li>
 

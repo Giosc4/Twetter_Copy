@@ -65,10 +65,6 @@ section {
     border-radius: 10px 10px 0 0;
 }
 
-
-
-
-
 .listTweet {
     padding: 10px;
 }
@@ -90,3 +86,49 @@ section {
     background-color: #f1f1f1;
     border-radius: 0 0 10px 10px;
 }
+
+.user-list {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .user-list h2 {
+    padding: 20px;
+    background-color: #1da1f2;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .user-list ul {
+    padding: 10px;
+    list-style: none;
+  }
+  
+  .user-list li {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .user-list .username {
+    margin: 0;
+    padding: 10px;
+    font-weight: bold;
+  }
+  
+  .user-list .follow-btn {
+    background-color: #1da1f2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .user-list .follow-btn:hover {
+    background-color: #0c86c4;
+  }
+  

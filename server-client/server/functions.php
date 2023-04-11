@@ -238,38 +238,65 @@ function deleteAccount($username)
 
 
 
-function getMyFollower($username)
+function getMyFollowers($username)
 {
     include("db.php");
-    $sql = "SELECT friend_id FROM follows WHERE user_id='$username'";
+    $sql = "";
 
     $result = $conn->query($sql);
 
     $followers = array();
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $followers[] = $row["follower"];
+            $followers[] = $row;
         }
     }
     return $followers;
 }
 
-function getMyFollowed($username)
+function getMyFollowing($username)
 {
     include("db.php");
 
-    $sql = "SELECT friend_id FROM follows WHERE friend_id='$username'";
+    $sql = "SELECT * FROM users WHERE user_id IN (SELECT friend_id FROM follows WHERE user_id=(SELECT user_id FROM users WHERE username='$username'))";
 
-    // Esecuzione della query
     $result = $conn->query($sql);
 
-    // Recupero dei dati e restituzione
     $followed = array();
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $followed[] = $row["followed"];
+            $followed[] = $row;
         }
     }
     return $followed;
 }
+
+function getNewUsers($username)
+{
+    include("db.php");
+    $sql = "SELECT username FROM users WHERE username NOT IN (SELECT friend_id FROM follows WHERE user_id = '$username') ";
+    $result = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+
+        echo "<ul>";
+        while ($row = mysqli_fetch_assoc($result)) {
+            $userFriend = $row["username"];
+            echo "<form action='home.php' method='post'>";
+
+            echo "<li><span class='username' value='friend_username'>" . 'Username: ' . $row["username"] . "</span><button onclick='follow($username, $userFriend )' > SUBMIT</button></li> ";
+            echo "</form>";
+        }
+        echo "</ul>";
+    } else {
+        echo "Non ci sono utenti disponibili.";
+    }
+}
+
+function submitNewFollow($username, $userFriend){
+    alert("ciao");
+}
+
+
+
 ?>

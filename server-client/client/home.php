@@ -10,7 +10,6 @@
     <?php
     session_start();
     if (!$_SESSION['username']) {
-        // Redirect all'area di login se l'utente non è loggato
         header('Location: login.php');
         exit;
     }
@@ -26,7 +25,7 @@
 
             <section class="new-tweet">
                 <form action="home.php" method="post">
-                    <h2>Benvenuto
+                    <h2>Welcome
                         <?php echo $username = $_SESSION['username']; ?>
                     </h2>
                     <div class="tweet-form">
@@ -45,12 +44,13 @@
                 </div>
             </section>
 
-            <section>
-                <div class="tweet-list">
-                    <h2>my Tweets</h2>
-                    <div class="listTweet">
-                        <?php getTweetsHomeMine($username); ?>
-                    </div>
+            <section> <!-- Lista di utenti -->
+                <div class="user-list">
+                    <h2>New Users</h2>
+                    <?php
+                    getNewUsers($username);
+                    ?>
+
                 </div>
             </section>
 
@@ -90,6 +90,20 @@
             echo "ERRORE: durante l'eliminazione del tweet";
         }
     }
+
+    if (isset($_POST['newFollow'])) {
+        $friend_username = $_POST['friend_username'];
+        include("db.php");
+    
+        $sql = "INSERT INTO follows (user_id, friend_id) VALUES ('$username', '$friend_username')";
+        if (mysqli_query($conn, $sql)) {
+            echo "Nuovo amico aggiunto con successo!";
+        } else {
+            echo "Errore: " . $sql . "<br>" . mysqli_error($conn);
+        }
+        exit();
+    }
+
 
     ?>
 
