@@ -82,30 +82,42 @@
         </li>
 
         <li>
-          <table class="followers-table">
-            <tr>
-              <td>
+            <table class="followers-table">
+              <tr>
+                <td>
 
-                <!-- lista dei follower -->
-                <h3>My follower</h3>
-                <?php getMyFollowers($username); ?>
-              </td>
-              <td>
+                  <!-- lista dei follower -->
+                  <h3>My Followers</h3>
+                  <?php
+                  $followers = getMyFollowers($username);
+                  foreach ($followers as $follower) {
+                    echo '<span class="username">' . $follower['friend_id'] . '</span>';
+                    echo '<button class="unFollow" name="unFollow" value="' . $follower['friend_id'] . '"> Unfollow</button> <hr>';
+                  }
+                  ?>
+                </td>
+                <td>
 
-                <!-- lista dei followed -->
-                <h3>My Followed</h3>
-                <?php getMyFollowing($username); ?>
-              </td>
+                  <!-- lista dei followed -->
+                  <h3>My Following</h3>
+                  <?php
+                  $followed = getMyFollowing($username);
+                  foreach ($followed as $follow) {
+                    echo '<span class="username">' . $follow['friend_id'] . '</span>';
+                    echo '<button class="unFollow" name="unFollow" value="' . $follower['friend_id'] . '"> Unfollow</button> <hr>';
+                  }
+                  ?>
+                </td>
+              </tr>
+            </table>
 
-            </tr>
-
-          </table>
         </li>
         <br>
         <li>
           <form action="profile.php" method="post">
             <input type="submit" name="deleteAccount" class="deleteAccount" value="Delete account"
               onclick="return confirm('Are you sure you want to delete your account?')">
+
           </form>
         </li>
 

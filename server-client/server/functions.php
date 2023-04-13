@@ -238,10 +238,11 @@ function deleteAccount($username)
 
 
 
-function getMyFollowers($username)
+function getMyFollowers($user)
 {
     include("db.php");
-    $sql = "";
+
+    $sql = "SELECT friend_id FROM follows WHERE  user_id ='$user' AND user_id != friend_id";
 
     $result = $conn->query($sql);
 
@@ -254,11 +255,13 @@ function getMyFollowers($username)
     return $followers;
 }
 
-function getMyFollowing($username)
+
+
+function getMyFollowing($user)
 {
     include("db.php");
 
-    $sql = "SELECT * FROM users WHERE user_id IN (SELECT friend_id FROM follows WHERE user_id=(SELECT user_id FROM users WHERE username='$username'))";
+    $sql = "SELECT friend_id FROM follows WHERE friend_id = '$user' AND user_id != friend_id";
 
     $result = $conn->query($sql);
 
@@ -271,31 +274,57 @@ function getMyFollowing($username)
     return $followed;
 }
 
-function getNewUsers($username)
+function getUserListHome($user)
 {
     include("db.php");
-    $sql = "SELECT username FROM users WHERE username NOT IN (SELECT friend_id FROM follows WHERE user_id = '$username') ";
-    $result = mysqli_query($conn, $sql);
 
-    if (mysqli_num_rows($result) > 0) {
+    $sql = "SELECT username FROM users WHERE username NOT IN (SELECT friend_id FROM follows WHERE user_id = '$user') ";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
 
         echo "<ul>";
-        while ($row = mysqli_fetch_assoc($result)) {
+        while ($row = $result->fetch_assoc()) {
             $userFriend = $row["username"];
             echo "<form action='home.php' method='post'>";
-
-            echo "<li><span class='username' value='friend_username'>" . 'Username: ' . $row["username"] . "</span><button onclick='follow($username, $userFriend )' > SUBMIT</button></li> ";
+            // IL PROBLEMA è QUA 
+            echo "<li><span class='username' value='friend_username'>Username: " . $row["username"] . "</span><button class='follow-button' name='user_id' value='" . $row['username'] . "'>Segui</button></li>";
             echo "</form>";
         }
         echo "</ul>";
+        if (isset($_POST['newFollow'])) {
+            $friend_username = $_POST['friend_username'];
+            include("db.php");
+        
+            $sql = "INSERT INTO follows (user_id, friend_id) VALUES ('$user', '$friend_username')";
+            if (mysqli_query($conn, $sql)) {
+                echo "NEW FRIEND ADDED!";
+            } else {
+                echo "Errore: " . $sql . "<br>" . mysqli_error($conn);
+            }
+            exit();
+        }
+    
+        if (isset($_POST['user_id'])) {
+            $userId = $_POST['user_id'];
+            echo "User ID: $user, Friend ID: $userId"; // aggiungi una riga di stampa per visualizzare i valori
+
+            
+            // Aggiungi un'entrata nella tabella di follow
+            $sql = "INSERT INTO follows (user_id, friend_id) VALUES ('$user', '$userId')";
+            if ($conn->query($sql) == TRUE) {
+              echo "Utente seguito con successo";
+            } else {
+              echo "Errore durante il follow: " . $conn->error;
+            }
+          }
+    
     } else {
         echo "Non ci sono utenti disponibili.";
     }
 }
 
-function submitNewFollow($username, $userFriend){
-    alert("ciao");
-}
+
 
 
 

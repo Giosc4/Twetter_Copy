@@ -47,9 +47,7 @@
             <section> <!-- Lista di utenti -->
                 <div class="user-list">
                     <h2>New Users</h2>
-                    <?php
-                    getNewUsers($username);
-                    ?>
+                    <?php getUserListHome($username); ?>
 
                 </div>
             </section>
@@ -91,18 +89,6 @@
         }
     }
 
-    if (isset($_POST['newFollow'])) {
-        $friend_username = $_POST['friend_username'];
-        include("db.php");
-    
-        $sql = "INSERT INTO follows (user_id, friend_id) VALUES ('$username', '$friend_username')";
-        if (mysqli_query($conn, $sql)) {
-            echo "Nuovo amico aggiunto con successo!";
-        } else {
-            echo "Errore: " . $sql . "<br>" . mysqli_error($conn);
-        }
-        exit();
-    }
 
 
     ?>

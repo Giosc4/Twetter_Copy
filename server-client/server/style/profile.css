@@ -141,3 +141,45 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
+.user-row {
+    padding: 50px;
+    text-align: center;
+  }
+  
+  .username {
+    display: block;
+    padding-left: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    font-size: 26px;
+    color: #333;
+  }
+  
+  .followers-table .username {
+    display: inline-block;
+    width: calc(100% - 120px);
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .followers-table .unFollow {
+    display: inline-block;
+    width: 100px;
+    margin-left: 10px;
+    padding: 5px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  
+  .followers-table .unFollow:hover {
+    background-color: #c62828;
+  }
+  
+  
+  

@@ -31,7 +31,8 @@ section {
 
 .tweet-form textarea {
     width: 80%;
-    padding: 10px;
+    height: 110px;
+    padding: 20px;
     border-radius: 10px;
     border: 1px solid #ccc;
     resize: none;
@@ -132,3 +133,11 @@ section {
     background-color: #0c86c4;
   }
   
+  .follow-button {
+    background-color: #1da1f2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
