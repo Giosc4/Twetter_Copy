@@ -12,7 +12,6 @@ function getDataUtente($user)
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        echo " <h2>Dati utente " . $user . "</h2>";
         while ($row = $result->fetch_assoc()) {
             if ($row["username"] == $user) {
 
@@ -95,6 +94,29 @@ function isAdmin($user)
 
 }
 
+
+function addLiketoTweet($user_id, $post_id){
+    include("db.php");
+
+    // Controlla se l'utente ha già messo like a questo tweet
+    $likeSql = "SELECT * FROM likes WHERE tweet_id = $post_id AND user_id = '$user_id'";
+    $likeResult = $conn->query($likeSql);
+    echo "    .    " . $user_id;
+
+    if ($likeResult->num_rows == 0) {
+        // Aggiungi un like al tweet
+        $insertSql = "INSERT INTO likes (user_id, tweet_id) VALUES ('$user_id', '$post_id')";
+        if ($conn->query($insertSql) === TRUE) {
+            echo "Like added successfully.";
+        } else {
+            echo "Error: " . $insertSql . "<br>" . $conn->error;
+        }
+    } else {
+        echo "User already liked this tweet.";
+    }
+}
+
+
 function getTweetsHomeNotMine($user)
 {
     include("db.php");
@@ -104,18 +126,24 @@ function getTweetsHomeNotMine($user)
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            if ($row["username"] != $user) {
-                echo "<div class='tweet-container'>";
-                echo "<p class='usernameT'>" . "Username: " . $row["username"] . "</p>";
-                echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
-                echo "<p class='created_atT'>" . "Created At: " . $row["created_at"] . "</p>";
-                echo "<form action='home.php' method='post'>";
-                if (isAdmin($user)) {
-                    echo "<button type='submit' class='delete-button' name='deleteTweet' value='" . $row['tweet_id'] . "'>Delete</button>";
-                }
-                echo "</form></div>";
-                echo "<br> <hr>";
+
+            $likeSql = "SELECT COUNT(*) as count FROM likes WHERE tweet_id = {$row['tweet_id']}";
+            $likeResult = $conn->query($likeSql);
+            $likeRow = $likeResult->fetch_assoc();
+            $likeCount = $likeRow['count'];
+
+            echo "<div class='tweet-container'>";
+            echo "<p class='usernameT'>" . "Username: " . $row["username"] . "</p>";
+            echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
+            echo "<p class='created_atT'>" . "Created At: " . $row["created_at"] . "</p>";
+            echo "<p class='like-count'>" . "Likes: " . $likeCount . "</p>";
+            echo "<form action='home.php' method='post'>";
+            echo "<button type='submit' class='like-button' name='likeTweet' value='" . $row['tweet_id'] . "'>Like</button>";
+            if (isAdmin($user)) {
+                echo "<button type='submit' class='delete-button' name='deleteTweet' value='" . $row['tweet_id'] . "'>Delete</button>";
             }
+            echo "</form></div>";
+            echo "<br> <hr>";
         }
     } else {
         echo "0 results";
@@ -133,24 +161,29 @@ function getTweetsHomeMine($user)
 
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            if ($row["username"] == $user) {
-                echo "<div class='tweet-container'>";
-                echo "<p class='usernameT'>" . "Username: " . $row["username"] . "</p>";
-                echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
-                echo "<p class='created_atT'>" . "Created At: " . $row["created_at"] . "</p>";
-                echo "<form action='home.php' method='post'>";
-                if (isAdmin($user)) {
-                    echo "<button type='submit' class='delete-button' name='deleteTweet' value='" . $row['tweet_id'] . "'>Delete</button>";
-                }
-                echo "</form></div>";
-                echo "<br> <hr>";
-            }
-        }
+            $likeSql = "SELECT COUNT(*) as count FROM likes WHERE tweet_id = {$row['tweet_id']}";
+            $likeResult = $conn->query($likeSql);
+            $likeRow = $likeResult->fetch_assoc();
+            $likeCount = $likeRow['count'];
 
+            echo "<div class='tweet-container'>";
+            echo "<p class='usernameT'>" . "Username: " . $row["username"] . "</p>";
+            echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
+            echo "<p class='created_atT'>" . "Created At: " . $row["created_at"] . "</p>";
+            echo "<p class='like-count'>" . "Likes: " . $likeCount . "</p>";
+            echo "<form action='profile.php' method='post'>";
+            echo "<button type='submit' class='like-button' name='likeTweet' value='" . $row['tweet_id'] . "'>Like</button>";
+            if (isAdmin($user)) {
+                echo "<button type='submit' class='delete-button' name='deleteTweet' value='" . $row['tweet_id'] . "'>Delete</button>";
+            }
+            echo "</form></div>";
+            echo "<br> <hr>";
+        }
     } else {
         echo "0 results";
     }
 }
+
 
 function writeTweetHome($user, $text)
 {
@@ -176,7 +209,6 @@ function registerAccount($email, $user, $password, $first_name, $last_name, $bio
 
     if ($result->num_rows > 0) {
         echo "ERRORE: Username già esistente ";
-        echo $sql;
 
     } else {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
@@ -219,11 +251,11 @@ function getLogin($user, $password)
     }
 }
 
-function deleteAccount($username)
+function deleteAccount($user)
 {
     include("db.php");
 
-    $sql = "DELETE FROM users WHERE username='$username'";
+    $sql = "DELETE FROM users WHERE username='$user'";
     $result = $conn->query($sql);
     echo $result;
     if (mysqli_affected_rows($conn) > 0) {
@@ -278,7 +310,7 @@ function getUserListHome($user)
 {
     include("db.php");
 
-    $sql = "SELECT username FROM users WHERE username NOT IN (SELECT friend_id FROM follows WHERE user_id = '$user') ";
+    $sql = "SELECT username FROM users WHERE username NOT IN (SELECT friend_id FROM follows WHERE user_id = '$user') AND username != '$user'";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {

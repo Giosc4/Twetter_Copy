@@ -82,34 +82,34 @@
         </li>
 
         <li>
-            <table class="followers-table">
-              <tr>
-                <td>
+          <table class="followers-table">
+            <tr>
+              <td>
 
-                  <!-- lista dei follower -->
-                  <h3>My Followers</h3>
-                  <?php
-                  $followers = getMyFollowers($username);
-                  foreach ($followers as $follower) {
-                    echo '<span class="username">' . $follower['friend_id'] . '</span>';
-                    echo '<button class="unFollow" name="unFollow" value="' . $follower['friend_id'] . '"> Unfollow</button> <hr>';
-                  }
-                  ?>
-                </td>
-                <td>
+                <!-- lista dei follower -->
+                <h3>My Followers</h3>
+                <?php
+                $followers = getMyFollowers($username);
+                foreach ($followers as $follower) {
+                  echo '<span class="username">' . $follower['friend_id'] . '</span>';
+                  echo '<button class="unFollow" name="unFollow" value="' . $follower['friend_id'] . '"> Unfollow</button> <hr>';
+                }
+                ?>
+              </td>
+              <td>
 
-                  <!-- lista dei followed -->
-                  <h3>My Following</h3>
-                  <?php
-                  $followed = getMyFollowing($username);
-                  foreach ($followed as $follow) {
-                    echo '<span class="username">' . $follow['friend_id'] . '</span>';
-                    echo '<button class="unFollow" name="unFollow" value="' . $follower['friend_id'] . '"> Unfollow</button> <hr>';
-                  }
-                  ?>
-                </td>
-              </tr>
-            </table>
+                <!-- lista dei followed -->
+                <h3>My Following</h3>
+                <?php
+                $followed = getMyFollowing($username);
+                foreach ($followed as $follow) {
+                  echo '<span class="username">' . $follow['friend_id'] . '</span>';
+                  echo '<button class="unFollow" name="unFollow" value="' . $follow['friend_id'] . '"> Unfollow</button> <hr>';
+                }
+                ?>
+              </td>
+            </tr>
+          </table>
 
         </li>
         <br>
@@ -127,11 +127,14 @@
 
 
   </div>
-  <?php include_once("../server/footer.php");
+  <?php 
+  include_once("../server/footer.php");
 
   if (isset($_POST['deleteAccount'])) {
     deleteAccount($username);
   }
+
+
 
   ?>
 

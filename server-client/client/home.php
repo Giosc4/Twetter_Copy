@@ -55,7 +55,6 @@
         </div>
     </main>
 
-    <?php include("../server/footer.php"); ?>
 
 
     <?php
@@ -90,10 +89,19 @@
     }
 
 
+    if (isset($_POST['likeTweet'])) {
+        $postId = $_POST['likeTweet'];
+        $user_id = $_SESSION['username'];
+        addLiketoTweet($user_id, $postId);
+        echo "like aggiunto";
+    }
+
+
 
     ?>
 
 
+<?php include("../server/footer.php"); ?>
 
 </body>
 
