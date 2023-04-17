@@ -143,7 +143,7 @@ function getTweetsHomeNotMine($user)
                 echo "<button type='submit' class='delete-button' name='deleteTweet' value='" . $row['tweet_id'] . "'>Delete</button>";
             }
             echo "</form></div>";
-            echo "<br> <hr>";
+            echo " <hr>";
         }
     } else {
         echo "0 results";
@@ -177,7 +177,7 @@ function getTweetsHomeMine($user)
                 echo "<button type='submit' class='delete-button' name='deleteTweet' value='" . $row['tweet_id'] . "'>Delete</button>";
             }
             echo "</form></div>";
-            echo "<br> <hr>";
+            echo "<hr>";
         }
     } else {
         echo "0 results";
