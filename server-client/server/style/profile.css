@@ -36,6 +36,12 @@ body {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 1);
 }
 
+.profile-edit {
+  flex: 1;
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
 .profile-display {
     flex: 1;
     background-color: #f1f1f1;

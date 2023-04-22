@@ -15,7 +15,6 @@
         <nav>
             <ul>
                 <li><a href="../client/home.php">Home</a></li>
-                <li><a href="#">Settings</a></li>
                 <li><a href="../client/profile.php">Profile</a></li>
             </ul>
         </nav>

@@ -12,6 +12,35 @@ body {
 
 }
 
+.searchBar form {
+  margin: 0 auto;
+  display: flex;
+  
+}
+
+.searchBar input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-right: 10px;
+
+}
+
+.searchBar button[type="submit"] {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background-color: #1da1f2;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.searchBar button:hover {
+  background-color: #0d8de4;
+}
+
+
 section {
     padding: 20px;
 }
@@ -141,6 +170,11 @@ section {
     padding: 5px 10px;
     cursor: pointer;
   }
+
+  .follow-button:hover {
+    background-color: #0c86c4;
+  }
+
   .tweet-container {
     padding: 10px;
   }
@@ -163,7 +197,7 @@ section {
   }
   
   .like-button {
-    background-color: #1da1f2; 
+    background-color: #1da1f2;
     border: none;
     color: white;
     padding: 5px 10px;
@@ -171,10 +205,12 @@ section {
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
-    margin-right: 10px;
     cursor: pointer;
   }
-  
+  .like-button:hover {
+    background-color: #0cc42b;
+  }  
+
   .delete-button {
     background-color: #f44336;
     border: none;
@@ -186,6 +222,9 @@ section {
     font-size: 14px;
     cursor: pointer;
   }
+  .delete-button:hover {
+    background-color: #c02d22;
+  } 
   
   hr {
     border: 0;

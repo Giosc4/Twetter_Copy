@@ -44,15 +44,15 @@
               <td>
                 <div class="profile-edit">
                   <form action="profile.php" method="post">
-                    <label for="first_name">Nome:</label>
+                    <label >Name:</label>
                     <input type="text" id="first_name" name="first_name">
-                    <label for="last_name">Cognome:</label>
+                    <label >Surname:</label>
                     <input type="text" id="last_name" name="last_name">
-                    <label for="email">Email:</label>
+                    <label >Email:</label>
                     <input type="email" id="email" name="email">
-                    <label for="password">Password:</label>
+                    <label >Password:</label>
                     <input type="password" id="password" name="password">
-                    <label for="bio">Bio:</label>
+                    <label >Bio:</label>
                     <textarea id="bio" name="bio"></textarea>
                     <input type="submit" name='save' value="Salva">
 
@@ -60,11 +60,11 @@
                 </div>
                 <?php
                 if (isset($_POST['save'])) {
-                  $newFirst_name = $_POST['first_name'];
-                  $newLast_name = $_POST['last_name'];
-                  $newEmail = $_POST['email'];
-                  $newPassword = $_POST['password'];
-                  $newBio = $_POST['bio'];
+                  echo $newFirst_name = $_POST['first_name'];
+                  echo $newLast_name = $_POST['last_name'];
+                  echo $newEmail = $_POST['email'];
+                  echo $newPassword = $_POST['password'];
+                  echo $newBio = $_POST['bio'];
                   updateDataUtente($newFirst_name, $newLast_name, $newEmail, $username, $newPassword, $newBio);
                 }
 
@@ -84,27 +84,27 @@
         <li>
           <table class="followers-table">
             <tr>
-              <td>
-
+            <td>
+                <?php $followers = getMyFollowers($username); ?>
                 <!-- lista dei follower -->
-                <h3>My Followers</h3>
+                <h3>My Followers: <?php echo count($followers);?></h3>
                 <?php
-                $followers = getMyFollowers($username);
+                
                 foreach ($followers as $follower) {
-                  echo '<span class="username">' . $follower['friend_id'] . '</span>';
-                  echo '<button class="unFollow" name="unFollow" value="' . $follower['friend_id'] . '"> Unfollow</button> <hr>';
+                  echo '<span class="username">' . $follower['follower_username'] . '</span>';
+                  echo '<button class="unFollow" name="unFollow" value="' . $follower['follower_username'] . '"> Unfollow</button> <hr>';
                 }
                 ?>
               </td>
               <td>
+              <?php $followed = getMyFollowing($username); ?>
 
                 <!-- lista dei followed -->
-                <h3>My Following</h3>
+                <h3>My Following: <?php echo count($followed);?></h3>
                 <?php
-                $followed = getMyFollowing($username);
                 foreach ($followed as $follow) {
-                  echo '<span class="username">' . $follow['friend_id'] . '</span>';
-                  echo '<button class="unFollow" name="unFollow" value="' . $follow['friend_id'] . '"> Unfollow</button> <hr>';
+                  echo '<span class="username">' . $follow['username'] . '</span>';
+                  echo '<button class="unFollow" name="unFollow" value="' . $follow['username'] . '"> Unfollow</button> <hr>';
                 }
                 ?>
               </td>

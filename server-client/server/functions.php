@@ -16,8 +16,8 @@ function getDataUtente($user)
             if ($row["username"] == $user) {
 
                 echo "<ul>";
-                echo "<li><strong>Nome:</strong> " . $row["first_name"] . "</li>";
-                echo "<li><strong>Cognome:</strong> " . $row["last_name"] . "</li>";
+                echo "<li><strong>Name:</strong> " . $row["first_name"] . "</li>";
+                echo "<li><strong>Surname:</strong> " . $row["last_name"] . "</li>";
                 echo "<li><strong>Email:</strong> " . $row["email"] . "</li>";
                 echo "<li><strong>Bio:</strong> " . $row["bio"] . "</li>";
                 echo "</ul>";
@@ -41,21 +41,15 @@ function updateDataUtente($first_name, $last_name, $email, $user, $password, $bi
     $result = $conn->query($sql);
 
     while ($row = $result->fetch_assoc()) {
-        if ($first_name == "") {
-            $first_name = $row["first_name"];
-        }
-        if ($last_name == "") {
-            $last_name = $row["last_name"];
-        }
-        if ($email == "") {
-            $email = $row["email"];
-        }
-        if ($password == "") {
-            $password = password_hash($row["password"], PASSWORD_DEFAULT);
-        }
-        if ($bio == "") {
-            $bio = $row["bio"];
-        }
+        $OLDfirst_name = $row["first_name"];
+
+        $OLDlast_name = $row["last_name"];
+
+        $OLDemail = $row["email"];
+
+        $OLDpassword = $row["password"];
+
+        $OLDbio = $row["bio"];
     }
 
     // Aggiorna i dati utente nella tabella users
@@ -95,19 +89,22 @@ function isAdmin($user)
 }
 
 
-function addLiketoTweet($user_id, $post_id){
+function addLiketoTweet($user_id, $post_id)
+{
     include("db.php");
 
     // Controlla se l'utente ha già messo like a questo tweet
-    $likeSql = "SELECT * FROM likes WHERE tweet_id = $post_id AND user_id = '$user_id'";
+    $likeSql = "SELECT * FROM likes WHERE tweet_id = $post_id AND username = '$user_id'";
     $likeResult = $conn->query($likeSql);
     echo "    .    " . $user_id;
 
     if ($likeResult->num_rows == 0) {
         // Aggiungi un like al tweet
-        $insertSql = "INSERT INTO likes (user_id, tweet_id) VALUES ('$user_id', '$post_id')";
+        $insertSql = "INSERT INTO likes (username, tweet_id) VALUES ('$user_id', '$post_id')";
         if ($conn->query($insertSql) === TRUE) {
             echo "Like added successfully.";
+            header('Location: ../client/home.php');
+
         } else {
             echo "Error: " . $insertSql . "<br>" . $conn->error;
         }
@@ -274,7 +271,10 @@ function getMyFollowers($user)
 {
     include("db.php");
 
-    $sql = "SELECT friend_id FROM follows WHERE  user_id ='$user' AND user_id != friend_id";
+    $sql = "SELECT follower_username
+    FROM follows
+    WHERE username = '$user' AND follower_username != '$user';
+    ";
 
     $result = $conn->query($sql);
 
@@ -293,7 +293,7 @@ function getMyFollowing($user)
 {
     include("db.php");
 
-    $sql = "SELECT friend_id FROM follows WHERE friend_id = '$user' AND user_id != friend_id";
+    $sql = "SELECT username FROM follows WHERE follower_username = '$user' AND username != '$user';";
 
     $result = $conn->query($sql);
 
@@ -310,8 +310,9 @@ function getUserListHome($user)
 {
     include("db.php");
 
-    $sql = "SELECT username FROM users WHERE username NOT IN (SELECT friend_id FROM follows WHERE user_id = '$user') AND username != '$user'";
-    $result = $conn->query($sql);
+    // $sql = "SELECT username FROM users WHERE username NOT IN (SELECT follower_username FROM follows WHERE user_id = '$user') AND username != '$user'";
+    $sql = "SELECT username FROM users WHERE username NOT IN ( SELECT username FROM follows WHERE follower_username = '$user' ) AND username != '$user'";
+        $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
 
@@ -327,8 +328,8 @@ function getUserListHome($user)
         if (isset($_POST['newFollow'])) {
             $friend_username = $_POST['friend_username'];
             include("db.php");
-        
-            $sql = "INSERT INTO follows (user_id, friend_id) VALUES ('$user', '$friend_username')";
+
+            $sql = "INSERT INTO follows (follower_username, following_username) VALUES ('$user', '$friend_username')";
             if (mysqli_query($conn, $sql)) {
                 echo "NEW FRIEND ADDED!";
             } else {
@@ -336,23 +337,10 @@ function getUserListHome($user)
             }
             exit();
         }
-    
-        if (isset($_POST['user_id'])) {
-            $userId = $_POST['user_id'];
-            echo "User ID: $user, Friend ID: $userId"; // aggiungi una riga di stampa per visualizzare i valori
 
-            
-            // Aggiungi un'entrata nella tabella di follow
-            $sql = "INSERT INTO follows (user_id, friend_id) VALUES ('$user', '$userId')";
-            if ($conn->query($sql) == TRUE) {
-              echo "Utente seguito con successo";
-            } else {
-              echo "Errore durante il follow: " . $conn->error;
-            }
-          }
-    
+
     } else {
-        echo "Non ci sono utenti disponibili.";
+        echo "<p class='NoUsers'>Non ci sono utenti disponibili.</p>";
     }
 }
 

@@ -23,6 +23,15 @@
     <main>
         <div class="container">
 
+            <section class="searchBar">
+                <form method="get" action="search.php">
+                    <input type="text" name="q" placeholder="Search..." /> 
+                    <button type="submit">Search</button> <br>
+                </form>
+
+            </section>
+
+
             <section class="new-tweet">
                 <form action="home.php" method="post">
                     <h2>Welcome
@@ -52,9 +61,12 @@
                 </div>
             </section>
 
+
         </div>
+
     </main>
 
+    <?php include("../server/footer.php"); ?>
 
 
     <?php
@@ -101,7 +113,6 @@
     ?>
 
 
-<?php include("../server/footer.php"); ?>
 
 </body>
 

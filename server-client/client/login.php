@@ -6,7 +6,9 @@
         - Aggiungere una barra di ricerca di tweet
         - Aggiungere una tabella per seguire gli utenti
         - non funziona il pulsante elimina utente
-        
+        - non funziona il pulsante update User
+        - la lista di utenti nella home è sbaligata, ci sono anche gli utenti che già segui 
+        - updateDataUtente non funziona
  -->
 
 
