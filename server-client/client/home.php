@@ -18,22 +18,42 @@
     include("../server/functions.php");
 
     include("../server/header.php");
+    if (isset($_POST['logout'])) {
+        session_start();
+        session_destroy();
+        header('Location: ../client/login.php');
+    }
 
     ?>
     <main>
-        <div class="container">
+        <form action="home.php" method="post">
 
-            <section class="searchBar">
-                <form method="get" action="search.php">
-                    <input type="text" name="q" placeholder="Search..." /> 
-                    <button type="submit">Search</button> <br>
-                </form>
+            <div class="container">
 
-            </section>
+                <section class="searchBar">
+                    <input type="text" name="textInput" placeholder="Search..." />
+                    <button type="submit" class="search" name="search">Search</button>
+                </section>
+                <br>
+                <?php
+                if (isset($_POST['search'])) {
+                    echo "<div class='searchResult'>";
+                    $search = $_POST['textInput'];
 
+                    if (strpos($search, '@') !== false) {
+                        $search = str_replace('@', '', $search); 
+                        searchBar_user($search);
+                    }
+                    else {
+                        searchBar_tweets($search);
+                    }
+                    echo "</div>";
+                }
 
-            <section class="new-tweet">
-                <form action="home.php" method="post">
+                ?>
+                <hr>
+
+                <section class="new-tweet">
                     <h2>Welcome
                         <?php echo $username = $_SESSION['username']; ?>
                     </h2>
@@ -41,79 +61,57 @@
                         <textarea placeholder="What's happening?" name="text"></textarea>
                         <button type="submit" name="tweet">Tweet</button>
                     </div>
-                </form>
-            </section>
+                    <?php
+                    if (isset($_POST['tweet'])) {
+                        $result = writeTweetHome($username, $_POST['text']);
+                        if ($result == true) {
+                            header('Location: ../client/home.php');
+                        } else {
+                            exit();
+                        }
+                    }
+                    ?>
+                </section>
 
-            <section>
-                <div class="tweet-list">
-                    <h2>Newsfeed</h2>
-                    <div class="listTweet">
-                        <?php getTweetsHomeNotMine($username); ?>
+                <section>
+                    <div class="tweet-list">
+                        <h2>Newsfeed</h2>
+                        <div class="listTweet">
+                            <?php getTweetsHomeNotMine($username);
+                            if (isset($_POST['deleteTweet'])) {
+                                $tweetId = $_POST['deleteTweet'];
+                                $sql = "DELETE FROM tweets WHERE tweet_id = '$tweetId'";
+                                $result = $conn->query($sql);
+                                if ($result) {
+                                    header('Location: ../client/home.php');
+                                } else {
+                                    echo "ERRORE: durante l'eliminazione del tweet";
+                                }
+                            }
+                            if (isset($_POST['likeTweet'])) {
+                                $postId = $_POST['likeTweet'];
+                                $user_id = $_SESSION['username'];
+                                addLiketoTweet($user_id, $postId);
+                                echo "like aggiunto";
+                            }
+                            ?>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <section> <!-- Lista di utenti -->
-                <div class="user-list">
-                    <h2>New Users</h2>
-                    <?php getUserListHome($username); ?>
+                <section> <!-- Lista di utenti -->
+                    <div class="user-list">
+                        <h2>New Users</h2>
+                        <?php getUserListHome($username); ?>
 
-                </div>
-            </section>
+                    </div>
+                </section>
 
 
-        </div>
-
+            </div>
+        </form>
     </main>
-
     <?php include("../server/footer.php"); ?>
-
-
-    <?php
-    if (isset($_POST['logout'])) {
-        // gestisci il click sul pulsante Logout
-        session_start();
-        session_destroy();
-        header('Location: ../client/login.php');
-    }
-    if (isset($_POST['tweet'])) {
-
-        $result = writeTweetHome($username, $_POST['text']);
-        if ($result == true) {
-
-            header('Location: ../client/home.php');
-        } else {
-            exit();
-        }
-    }
-
-    include("../server/db.php");
-
-    if (isset($_POST['deleteTweet'])) {
-        $tweetId = $_POST['deleteTweet'];
-        $sql = "DELETE FROM tweets WHERE tweet_id = '$tweetId'";
-        $result = $conn->query($sql);
-        if ($result) {
-            header('Location: ../client/home.php');
-        } else {
-            echo "ERRORE: durante l'eliminazione del tweet";
-        }
-    }
-
-
-    if (isset($_POST['likeTweet'])) {
-        $postId = $_POST['likeTweet'];
-        $user_id = $_SESSION['username'];
-        addLiketoTweet($user_id, $postId);
-        echo "like aggiunto";
-    }
-
-
-
-    ?>
-
-
-
 </body>
 
 </html>

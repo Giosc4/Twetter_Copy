@@ -312,7 +312,7 @@ function getUserListHome($user)
 
     // $sql = "SELECT username FROM users WHERE username NOT IN (SELECT follower_username FROM follows WHERE user_id = '$user') AND username != '$user'";
     $sql = "SELECT username FROM users WHERE username NOT IN ( SELECT username FROM follows WHERE follower_username = '$user' ) AND username != '$user'";
-        $result = $conn->query($sql);
+    $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
 
@@ -343,8 +343,47 @@ function getUserListHome($user)
         echo "<p class='NoUsers'>Non ci sono utenti disponibili.</p>";
     }
 }
+function searchBar_user($request)
+{
+    include("db.php");
+
+    $query = mysqli_real_escape_string($conn, $request);
+    $sql = "SELECT first_name, last_name, bio, username FROM users WHERE username LIKE '%$query%'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<p class='username_name'>Username: " . $row['username'] . "</p><br>";
+            echo "<p class='username'>Name: " . $row['first_name'] . "<br>Surname: " . $row['last_name'] . "<br>";
+            echo "Bio: " . $row['bio'] . "</p><br>";
+        }
+    } else {
+        echo "Nessun risultato";
+    }
+}
 
 
+function searchBar_tweets($request)
+{
+    include("db.php");
+
+    $query = mysqli_real_escape_string($conn, $request);
+    $sql = "SELECT u.username, t.text FROM users u LEFT JOIN tweets t ON u.username = t.username WHERE u.username LIKE '%$query%' OR t.text LIKE CONCAT('%', '%$query%', '%') ";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+
+        while ($row = $result->fetch_assoc()) {
+            if (stripos($row['text'], $request) !== false) {
+
+                echo "<p class='username_name'>Username: " . $row['username'] . "</p>";
+                echo "<p class='tweet_text'>Tweets: " . $row['text'] . "</p><br>";
+            }
+        }
+    } else {
+        echo "Nessun risultato";
+    }
+}
 
 
 
