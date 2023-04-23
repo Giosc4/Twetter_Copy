@@ -78,7 +78,6 @@
           <div class="tweet-list">
             <h2>I miei Tweets</h2>
             <?php getMyTweets($username);
-            getTweetsHome($username);
             if (isset($_POST['deleteTweet'])) {
               $tweetId = $_POST['deleteTweet'];
               deleteTweet($tweetId);
@@ -103,11 +102,11 @@
                     <?php echo count($followers); ?>
                   </h3>
                   <?php
-
-                  foreach ($followers as $follower) {
-                    echo '<span class="username">' . $follower['follower_username'] . '</span>';
-                    echo '<button class="unFollow" name="unFollow" value="' . $follower['follower_username'] . '"> Unfollow</button> <hr>';
+                  foreach ($followers as $follow) {
+                    echo '<span class="username">' . $follow['username'] . '</span>';
+                    echo '<button class="unFollow" name="unFollow" value="' . $follow['username'] . '"> Unfollow</button> <hr>';
                   }
+
                   ?>
                 </td>
                 <td>
@@ -119,11 +118,11 @@
                   </h3>
                   <?php
                   foreach ($followed as $follow) {
-                    echo '<span class="username">' . $follow['username'] . '</span>';
-                    echo '<button class="unFollow" name="unFollow" value="' . $follow['username'] . '"> Unfollow</button> <hr>';
+                      echo '<span class="username">' . $follow['follower_username'] . '</span>';
+                      echo '<button class="unFollow" name="unFollow" value="' . $follow['follower_username'] . '"> Unfollow</button> <hr>';
                   }
-
                   ?>
+
                 </td>
               </tr>
               <?php

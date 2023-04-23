@@ -6,6 +6,8 @@
         - non funziona il pulsante update User
         - updateDataUtente non funziona
         - footer home
+        - controllare bene i follower e following 
+        - controllare il UnFOllow
  -->
 
 

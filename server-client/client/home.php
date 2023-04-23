@@ -92,9 +92,9 @@
                         <?php getUserListHome($username);
                         include("../server/db.php");
 
-                        if (isset($_POST['newFollow'])) {
-                            echo $user_id = $_SESSION['username'];
-                            addFriend($user_id, $_POST['userSelected']);
+                        if ($friend_user = isset($_POST['newFollow'])) {
+                            $user_id = $_SESSION['username'];
+                            addFriend($user_id, $friend_user);
                             header('Location: ../client/home.php');
                         }
                         ?>

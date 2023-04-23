@@ -111,8 +111,9 @@ function addLiketoTweet($user_id, $post_id)
 function getTweetsHome($user)
 {
     include("db.php");
-
-    $sql = "SELECT * FROM tweets WHERE username = '$user' OR username IN (SELECT follows.username FROM follows WHERE follower_username = '$user')";
+    $sql =" SELECT t.* FROM tweets t JOIN follows f ON t.username = f.username WHERE f.follower_username = '$user'";
+    // $sql =" SELECT * FROM tweets WHERE username IN (SELECT username FROM follows WHERE follower_username = '$user')";
+    // $sql = "SELECT * FROM tweets WHERE username <> '$user' AND username IN (SELECT follows.username FROM follows WHERE follower_username = '$user')";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -256,13 +257,14 @@ function deleteAccount($user)
         exit;
     }
 }
-
 function getMyFollowers($user)
 {
     include("db.php");
 
-    $sql = "SELECT follower_username FROM follows WHERE username = '$user' AND follower_username != '$user'";
+    //    $sql = "SELECT follower_username FROM follows WHERE username = '$user' AND follower_username != '$user'";
 
+    $sql = "SELECT * FROM users INNER JOIN follows ON users.username = follows.username WHERE follows.follower_username = '$user'";
+    
     $result = $conn->query($sql);
 
     $followers = array();
@@ -277,8 +279,8 @@ function getMyFollowers($user)
 function getMyFollowing($user)
 {
     include("db.php");
-
-    $sql = "SELECT username FROM follows WHERE follower_username = '$user' AND username != '$user'";
+    $sql = "SELECT * FROM users INNER JOIN follows ON users.username = follows.follower_username WHERE follows.username = '$user'";
+    // $sql = "SELECT username FROM follows WHERE follower_username = '$user' AND username != '$user'";
 
     $result = $conn->query($sql);
 
@@ -290,6 +292,8 @@ function getMyFollowing($user)
     }
     return $followed;
 }
+
+
 
 function getUserListHome($user)
 {
@@ -324,8 +328,6 @@ function getUserListHome($user)
 function addFriend($user, $friend_username)
 {
     include("../server/db.php");
-    echo $user;
-    echo $friend_username;
     $sql = "INSERT INTO follows (username, follower_username) VALUES ('$user', '$friend_username')";
     $result = $conn->query($sql);
 
