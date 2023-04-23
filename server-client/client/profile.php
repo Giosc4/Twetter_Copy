@@ -13,7 +13,7 @@
   include_once("../server/functions.php");
   if (!isset($_SESSION['username'])) {
     // Redirect all'area di login se l'utente non è loggato
-    header('Location: start.php');
+    header('Location: login.php');
     exit;
   }
   include_once("../server/header.php");
@@ -94,38 +94,47 @@
 
         <li>
           <table class="followers-table">
-            <tr>
-              <td>
-                <?php $followers = getMyFollowers($username); ?>
-                <!-- lista dei follower -->
-                <h3>I Follow :
-                  <?php echo count($followers); ?>
-                </h3>
-                <?php
+            <form action="profile.php" method="post">
+              <tr>
+                <td>
+                  <?php $followers = getMyFollowers($username); ?>
+                  <!-- lista dei follower -->
+                  <h3>I Follow :
+                    <?php echo count($followers); ?>
+                  </h3>
+                  <?php
 
-                foreach ($followers as $follower) {
-                  echo '<span class="username">' . $follower['follower_username'] . '</span>';
-                  echo '<button class="unFollow" name="unFollow" value="' . $follower['follower_username'] . '"> Unfollow</button> <hr>';
-                }
-                ?>
-              </td>
-              <td>
-                <?php $followed = getMyFollowing($username); ?>
+                  foreach ($followers as $follower) {
+                    echo '<span class="username">' . $follower['follower_username'] . '</span>';
+                    echo '<button class="unFollow" name="unFollow" value="' . $follower['follower_username'] . '"> Unfollow</button> <hr>';
+                  }
+                  ?>
+                </td>
+                <td>
+                  <?php $followed = getMyFollowing($username); ?>
 
-                <!-- lista dei followed   -->
-                <h3>Follows Me:
-                  <?php echo count($followed); ?>
-                </h3>
-                <?php
-                foreach ($followed as $follow) {
-                  echo '<span class="username">' . $follow['username'] . '</span>';
-                  echo '<button class="unFollow" name="unFollow" value="' . $follow['username'] . '"> Unfollow</button> <hr>';
-                }
-                ?>
-              </td>
-            </tr>
+                  <!-- lista dei followed   -->
+                  <h3>Follows Me:
+                    <?php echo count($followed); ?>
+                  </h3>
+                  <?php
+                  foreach ($followed as $follow) {
+                    echo '<span class="username">' . $follow['username'] . '</span>';
+                    echo '<button class="unFollow" name="unFollow" value="' . $follow['username'] . '"> Unfollow</button> <hr>';
+                  }
+
+                  ?>
+                </td>
+              </tr>
+              <?php
+              if (isset($_POST['unFollow'])) {
+                $unFollow = $_POST['unFollow'];
+                echo $unFollow;
+                removeFriend($username, $unFollow);
+              }
+              ?>
+            </form>
           </table>
-
         </li>
         <br>
         <li>
@@ -133,23 +142,19 @@
             <input type="submit" name="deleteAccount" class="deleteAccount" value="Delete account"
               onclick="return confirm('Are you sure you want to delete your account?')">
 
+            <?php
+            if (isset($_POST['deleteAccount'])) {
+              deleteAccount($username);
+            }
+            ?>
           </form>
         </li>
 
       </ul>
     </div>
-
-
-
   </div>
   <?php
   include_once("../server/footer.php");
-
-  if (isset($_POST['deleteAccount'])) {
-    deleteAccount($username);
-  }
-
-
 
   ?>
 

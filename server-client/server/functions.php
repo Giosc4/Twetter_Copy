@@ -249,7 +249,7 @@ function deleteAccount($user)
     $result = $conn->query($sql);
     echo $result;
     if (mysqli_affected_rows($conn) > 0) {
-        echo "Account eliminato";
+        header('Location: ../client/login.php');
         exit;
     } else {
         echo "Errore durante l'eliminazione dell'account";
@@ -321,8 +321,6 @@ function getUserListHome($user)
 }
 
 
-
-
 function addFriend($user, $friend_username)
 {
     include("../server/db.php");
@@ -332,9 +330,25 @@ function addFriend($user, $friend_username)
     $result = $conn->query($sql);
 
     if ($result) {
-        echo "NUOVO AMICO AGGIUNTO!";
+        echo "Follow deleted!";
     } else {
-        echo "Errore: " . $conn->error;
+        echo "Error: " . $conn->error;
+    }
+    $conn->close();
+}
+
+function removeFriend($user, $friend_username){
+    include("../server/db.php");
+    echo $user;
+    echo $friend_username;
+    $sql = "DELETE FROM follows WHERE username = '$user' AND follower_username = '$friend_username'";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        echo "Follow deleted!";
+        header('Location: ../client/home.php');
+    } else {
+        echo "Error: " . $conn->error;
     }
     $conn->close();
 }

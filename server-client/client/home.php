@@ -27,9 +27,7 @@
     ?>
     <main>
         <form action="home.php" method="post">
-
             <div class="container">
-
                 <section class="searchBar">
                     <input type="text" name="textInput" placeholder="Search..." />
                     <button type="submit" class="search" name="search">Search</button>
@@ -48,10 +46,8 @@
                     }
                     echo "</div>";
                 }
-
                 ?>
                 <hr>
-
                 <section class="new-tweet">
                     <h2>Welcome
                         <?php echo $username = $_SESSION['username']; ?>
@@ -71,7 +67,6 @@
                     }
                     ?>
                 </section>
-
                 <section>
                     <div class="tweet-list">
                         <h2>Newsfeed</h2>
@@ -79,7 +74,7 @@
                             <?php getTweetsHome($username);
                             if (isset($_POST['deleteTweet'])) {
                                 $tweetId = $_POST['deleteTweet'];
-                                deleteTweet($tweetId); 
+                                deleteTweet($tweetId);
                             }
                             if (isset($_POST['likeTweet'])) {
                                 $postId = $_POST['likeTweet'];
@@ -91,7 +86,6 @@
                         </div>
                     </div>
                 </section>
-
                 <section> <!-- Lista di utenti -->
                     <div class="user-list">
                         <h2>New Users</h2>
@@ -104,15 +98,12 @@
                             header('Location: ../client/home.php');
                         }
                         ?>
-
                     </div>
                 </section>
-
-
             </div>
+            <?php include("../server/footer.php"); ?>
         </form>
     </main>
-    <?php include("../server/footer.php"); ?>
 </body>
 
 </html>
