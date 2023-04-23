@@ -26,7 +26,7 @@ function getDataUtente($user)
             }
         }
     } else {
-        echo "0 results";
+        echo "<p class='empty'>0 results</p>";
         return false;
     }
 
@@ -36,7 +36,6 @@ function updateDataUtente($first_name, $last_name, $email, $user, $password, $bi
 {
     include("db.php");
 
-    // Verifica se il nuovo username esiste già nel database
     $sql = "SELECT * FROM users WHERE username = '$user'";
     $result = $conn->query($sql);
 
@@ -52,7 +51,6 @@ function updateDataUtente($first_name, $last_name, $email, $user, $password, $bi
         $OLDbio = $row["bio"];
     }
 
-    // Aggiorna i dati utente nella tabella users
     $sql = "UPDATE users SET first_name='$first_name', last_name='$last_name', email='$email', password='$password', bio='$bio' WHERE username='$user'";
     $result = $conn->query($sql);
 
@@ -61,7 +59,6 @@ function updateDataUtente($first_name, $last_name, $email, $user, $password, $bi
         header('Location: ../client/home.php');
         exit;
     } else {
-        // Si è verificato un errore durante l'aggiornamento dei dati, restituisci un messaggio di errore
         echo "ERRORE: durante l'aggiornamento dei dati";
         exit;
     }
@@ -93,13 +90,11 @@ function addLiketoTweet($user_id, $post_id)
 {
     include("db.php");
 
-    // Controlla se l'utente ha già messo like a questo tweet
     $likeSql = "SELECT * FROM likes WHERE tweet_id = $post_id AND username = '$user_id'";
     $likeResult = $conn->query($likeSql);
     echo "    .    " . $user_id;
 
     if ($likeResult->num_rows == 0) {
-        // Aggiungi un like al tweet
         $insertSql = "INSERT INTO likes (username, tweet_id) VALUES ('$user_id', '$post_id')";
         if ($conn->query($insertSql) === TRUE) {
             echo "Like added successfully.";
@@ -109,16 +104,15 @@ function addLiketoTweet($user_id, $post_id)
             echo "Error: " . $insertSql . "<br>" . $conn->error;
         }
     } else {
-        echo "User already liked this tweet.";
+        echo "<p class='empty'>User already liked this tweet</p>";
+
     }
 }
-
-
-function getTweetsHomeNotMine($user)
+function getTweetsHome($user)
 {
     include("db.php");
 
-    $sql = "SELECT * FROM tweets WHERE tweets.username <> '$user'";
+    $sql = "SELECT * FROM tweets WHERE username = '$user' OR username IN (SELECT follows.username FROM follows WHERE follower_username = '$user')";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -143,11 +137,12 @@ function getTweetsHomeNotMine($user)
             echo " <hr>";
         }
     } else {
-        echo "0 results";
+        echo "<p class='empty'>0 results</p>";
     }
 }
 
-function getTweetsHomeMine($user)
+
+function getMyTweets($user)
 {
     include("db.php");
 
@@ -177,7 +172,7 @@ function getTweetsHomeMine($user)
             echo "<hr>";
         }
     } else {
-        echo "0 results";
+        echo "<p class='empty'>0 results</p>";
     }
 }
 
@@ -238,8 +233,6 @@ function getLogin($user, $password)
             exit;
         } else {
             echo 'Password errata';
-            // sleep(1);
-            // header("Location: login.php");
             exit;
         }
     } else {
@@ -257,7 +250,6 @@ function deleteAccount($user)
     echo $result;
     if (mysqli_affected_rows($conn) > 0) {
         echo "Account eliminato";
-        // header("Location: login.php");
         exit;
     } else {
         echo "Errore durante l'eliminazione dell'account";
@@ -265,16 +257,11 @@ function deleteAccount($user)
     }
 }
 
-
-
 function getMyFollowers($user)
 {
     include("db.php");
 
-    $sql = "SELECT follower_username
-    FROM follows
-    WHERE username = '$user' AND follower_username != '$user';
-    ";
+    $sql = "SELECT follower_username FROM follows WHERE username = '$user' AND follower_username != '$user'";
 
     $result = $conn->query($sql);
 
@@ -287,13 +274,11 @@ function getMyFollowers($user)
     return $followers;
 }
 
-
-
 function getMyFollowing($user)
 {
     include("db.php");
 
-    $sql = "SELECT username FROM follows WHERE follower_username = '$user' AND username != '$user';";
+    $sql = "SELECT username FROM follows WHERE follower_username = '$user' AND username != '$user'";
 
     $result = $conn->query($sql);
 
@@ -309,40 +294,51 @@ function getMyFollowing($user)
 function getUserListHome($user)
 {
     include("db.php");
-
-    // $sql = "SELECT username FROM users WHERE username NOT IN (SELECT follower_username FROM follows WHERE user_id = '$user') AND username != '$user'";
-    $sql = "SELECT username FROM users WHERE username NOT IN ( SELECT username FROM follows WHERE follower_username = '$user' ) AND username != '$user'";
+    $sql = "SELECT username 
+            FROM users 
+            WHERE username != '$user' 
+            AND username NOT IN (SELECT username FROM follows WHERE follower_username = '$user') 
+            AND username NOT IN (SELECT follower_username FROM follows WHERE username = '$user')";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
 
         echo "<ul>";
         while ($row = $result->fetch_assoc()) {
-            $userFriend = $row["username"];
-            echo "<form action='home.php' method='post'>";
-            // IL PROBLEMA è QUA 
-            echo "<li><span class='username' value='friend_username'>Username: " . $row["username"] . "</span><button class='follow-button' name='user_id' value='" . $row['username'] . "'>Segui</button></li>";
+            echo "<li><span class='username'>" . $row["username"] . "</span><br>";
+            echo "<form action='home.php' method='post'>"; 
+            echo "<input type='hidden' name='userSelected' value='" . $row["username"] . "'>"; 
+            echo "<button class='follow-button' name='newFollow' type='submit'>Follow</button>";
             echo "</form>";
+            echo "</li>";
+            
         }
+
         echo "</ul>";
-        if (isset($_POST['newFollow'])) {
-            $friend_username = $_POST['friend_username'];
-            include("db.php");
-
-            $sql = "INSERT INTO follows (follower_username, following_username) VALUES ('$user', '$friend_username')";
-            if (mysqli_query($conn, $sql)) {
-                echo "NEW FRIEND ADDED!";
-            } else {
-                echo "Errore: " . $sql . "<br>" . mysqli_error($conn);
-            }
-            exit();
-        }
-
-
     } else {
         echo "<p class='NoUsers'>Non ci sono utenti disponibili.</p>";
     }
 }
+
+
+
+
+function addFriend($user, $friend_username)
+{
+    include("../server/db.php");
+    echo $user;
+    echo $friend_username;
+    $sql = "INSERT INTO follows (username, follower_username) VALUES ('$user', '$friend_username')";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        echo "NUOVO AMICO AGGIUNTO!";
+    } else {
+        echo "Errore: " . $conn->error;
+    }
+    $conn->close();
+}
+
 function searchBar_user($request)
 {
     include("db.php");
@@ -385,6 +381,17 @@ function searchBar_tweets($request)
     }
 }
 
+function deleteTweet($tweetId) {
+    include("db.php"); 
 
+    $sql = "DELETE FROM tweets WHERE tweet_id = '$tweetId'";
+    $result = $conn->query($sql);
+
+    if ($result) {
+        header('Location: ../client/home.php');
+    } else {
+        echo "ERRORE: durante l'eliminazione del tweet";
+    }
+}
 
 ?>

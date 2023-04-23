@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Registrazione utente</title>
+  <title>Twetter Copy Register</title>
   <link rel="stylesheet" href="../server/style/register.css">
 </head>
 

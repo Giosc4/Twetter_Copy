@@ -19,8 +19,6 @@
             </ul>
         </nav>
         <div class="profile">
-            <img id="imgLogo" src="../server/img/profile-pic.jpg" alt="Profile Picture" width="50" height="50">
-            <!-- <p>Username</p> -->
             <form action="../server/header.php" method="post">
                 <input type='submit' class="logout-btn" name='logout' value='Logout'>
             </form>

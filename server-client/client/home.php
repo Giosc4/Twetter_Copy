@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Nome del social network</title>
+    <title>Twetter Copy Home</title>
     <link rel="stylesheet" href="../server/style/home.css">
 </head>
 
@@ -41,10 +41,9 @@
                     $search = $_POST['textInput'];
 
                     if (strpos($search, '@') !== false) {
-                        $search = str_replace('@', '', $search); 
+                        $search = str_replace('@', '', $search);
                         searchBar_user($search);
-                    }
-                    else {
+                    } else {
                         searchBar_tweets($search);
                     }
                     echo "</div>";
@@ -77,16 +76,10 @@
                     <div class="tweet-list">
                         <h2>Newsfeed</h2>
                         <div class="listTweet">
-                            <?php getTweetsHomeNotMine($username);
+                            <?php getTweetsHome($username);
                             if (isset($_POST['deleteTweet'])) {
                                 $tweetId = $_POST['deleteTweet'];
-                                $sql = "DELETE FROM tweets WHERE tweet_id = '$tweetId'";
-                                $result = $conn->query($sql);
-                                if ($result) {
-                                    header('Location: ../client/home.php');
-                                } else {
-                                    echo "ERRORE: durante l'eliminazione del tweet";
-                                }
+                                deleteTweet($tweetId); 
                             }
                             if (isset($_POST['likeTweet'])) {
                                 $postId = $_POST['likeTweet'];
@@ -102,7 +95,15 @@
                 <section> <!-- Lista di utenti -->
                     <div class="user-list">
                         <h2>New Users</h2>
-                        <?php getUserListHome($username); ?>
+                        <?php getUserListHome($username);
+                        include("../server/db.php");
+
+                        if (isset($_POST['newFollow'])) {
+                            echo $user_id = $_SESSION['username'];
+                            addFriend($user_id, $_POST['userSelected']);
+                            header('Location: ../client/home.php');
+                        }
+                        ?>
 
                     </div>
                 </section>

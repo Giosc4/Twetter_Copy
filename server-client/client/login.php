@@ -14,7 +14,7 @@
 
 
 <head>
-    <title>Titolo della pagina</title>
+    <title>Twetter Copy Login</title>
     <link rel="stylesheet" href="../server/style/login.css">
 
 </head>

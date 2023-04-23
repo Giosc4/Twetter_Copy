@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Profilo utente</title>
+  <title>Twetter Copy Profile</title>
   <link rel="stylesheet" href="../server/style/profile.css">
 </head>
 
@@ -44,15 +44,15 @@
               <td>
                 <div class="profile-edit">
                   <form action="profile.php" method="post">
-                    <label >Name:</label>
+                    <label>Name:</label>
                     <input type="text" id="first_name" name="first_name">
-                    <label >Surname:</label>
+                    <label>Surname:</label>
                     <input type="text" id="last_name" name="last_name">
-                    <label >Email:</label>
+                    <label>Email:</label>
                     <input type="email" id="email" name="email">
-                    <label >Password:</label>
+                    <label>Password:</label>
                     <input type="password" id="password" name="password">
-                    <label >Bio:</label>
+                    <label>Bio:</label>
                     <textarea id="bio" name="bio"></textarea>
                     <input type="submit" name='save' value="Salva">
 
@@ -77,19 +77,32 @@
         <li>
           <div class="tweet-list">
             <h2>I miei Tweets</h2>
-            <?php getTweetsHomeMine($username); ?>
+            <?php getMyTweets($username);
+            getTweetsHome($username);
+            if (isset($_POST['deleteTweet'])) {
+              $tweetId = $_POST['deleteTweet'];
+              deleteTweet($tweetId);
+            }
+            if (isset($_POST['likeTweet'])) {
+              $postId = $_POST['likeTweet'];
+              $user_id = $_SESSION['username'];
+              addLiketoTweet($user_id, $postId);
+            }
+            ?>
           </div>
         </li>
 
         <li>
           <table class="followers-table">
             <tr>
-            <td>
+              <td>
                 <?php $followers = getMyFollowers($username); ?>
                 <!-- lista dei follower -->
-                <h3>My Followers: <?php echo count($followers);?></h3>
+                <h3>I Follow :
+                  <?php echo count($followers); ?>
+                </h3>
                 <?php
-                
+
                 foreach ($followers as $follower) {
                   echo '<span class="username">' . $follower['follower_username'] . '</span>';
                   echo '<button class="unFollow" name="unFollow" value="' . $follower['follower_username'] . '"> Unfollow</button> <hr>';
@@ -97,10 +110,12 @@
                 ?>
               </td>
               <td>
-              <?php $followed = getMyFollowing($username); ?>
+                <?php $followed = getMyFollowing($username); ?>
 
-                <!-- lista dei followed -->
-                <h3>My Following: <?php echo count($followed);?></h3>
+                <!-- lista dei followed   -->
+                <h3>Follows Me:
+                  <?php echo count($followed); ?>
+                </h3>
                 <?php
                 foreach ($followed as $follow) {
                   echo '<span class="username">' . $follow['username'] . '</span>';
@@ -127,7 +142,7 @@
 
 
   </div>
-  <?php 
+  <?php
   include_once("../server/footer.php");
 
   if (isset($_POST['deleteAccount'])) {

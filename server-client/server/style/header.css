@@ -53,14 +53,6 @@ nav a:hover {
     align-items: center;
 }
 
-.profile img {
-    border-radius: 10px;
-    margin-left: 1rem;
-    height: 50px;
-    width: 60px;
-
-}
-
 .profile p {
     color: #14171A;
     font-weight: bold;

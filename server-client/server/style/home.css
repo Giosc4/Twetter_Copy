@@ -1,21 +1,21 @@
 body {
-    margin: 0;
-    padding: 0;
-    font-family: "Novecento", sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: "Novecento", sans-serif;
 }
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
 
 }
 
 .searchBar form {
   margin: 0 auto;
   display: flex;
-  
+
 }
 
 .searchBar input[type="text"] {
@@ -36,6 +36,7 @@ body {
   transition: background-color 0.3s ease;
 
 }
+
 .searchBar button:hover {
   background-color: #0d8de4;
 }
@@ -59,193 +60,204 @@ body {
 }
 
 section {
-    padding: 20px;
+  padding: 20px;
 }
 
 .new-tweet {
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 20px;
-    padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 20px;
 }
 
+.new-tweet button:hover {
+  background-color: #0d8de4;
+}
+
+
 .tweet-form {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
 }
 
 .tweet-form textarea {
-    width: 80%;
-    height: 110px;
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    resize: none;
+  width: 80%;
+  height: 110px;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  resize: none;
 }
 
 .tweet-form button {
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: none;
-    background-color: #1da1f2;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background-color: #1da1f2;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 
 .tweet-form button:hover {
-    background-color: #0d8de4;
+  background-color: #0d8de4;
 }
 
 .tweet-list {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
 .tweet-list h2 {
-    padding: 20px;
-    background-color: #1da1f2;
-    color: #fff;
-    border-radius: 10px 10px 0 0;
+  padding: 20px;
+  background-color: #1da1f2;
+  color: #fff;
+  border-radius: 10px 10px 0 0;
 }
 
 .listTweet {
-    padding: 10px;
+  padding: 10px;
 }
 
 .listTweet .tweet {
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
 }
 
 .listTweet .tweet p {
-    margin: 0;
-    padding: 10px;
+  margin: 0;
+  padding: 10px;
 }
 
 .listTweet .tweet small {
-    display: block;
-    margin: 0;
-    padding: 10px;
-    background-color: #f1f1f1;
-    border-radius: 0 0 10px 10px;
+  display: block;
+  margin: 0;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 0 0 10px 10px;
 }
 
 .user-list {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .user-list h2 {
-    padding: 20px;
-    background-color: #1da1f2;
-    color: #fff;
-    border-radius: 10px 10px 0 0;
-  }
-  
-  .user-list ul {
-    padding: 10px;
-    list-style: none;
-  }
-  
-  .user-list li {
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  .user-list .username {
-    margin: 0;
-    padding: 10px;
-    font-weight: bold;
-  }
-  
-  .user-list .follow-btn {
-    background-color: #1da1f2;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  .user-list .follow-btn:hover {
-    background-color: #0c86c4;
-  }
-  
-  .follow-button {
-    background-color: #1da1f2;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
 
-  .follow-button:hover {
-    background-color: #0c86c4;
-  }
+.user-list h2 {
+  padding: 20px;
+  background-color: #1da1f2;
+  color: #fff;
+  border-radius: 10px 10px 0 0;
+}
 
-  .tweet-container {
-    padding: 10px;
-  }
-  
-  .usernameT {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .textT {
-    margin-bottom: 5px;
-  }
-  
-  .created_atT {
-    margin-bottom: 5px;
-  }
-  
-  .like-count {
-    margin-bottom: 5px;
-  }
-  
-  .like-button {
-    background-color: #1da1f2;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .like-button:hover {
-    background-color: #0cc42b;
-  }  
+.user-list ul {
+  padding: 10px;
+  list-style: none;
+}
 
-  .delete-button {
-    background-color: #f44336;
-    border: none;
-    color: white;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  .delete-button:hover {
-    background-color: #c02d22;
-  } 
-  
-  hr {
-    border: 0;
-    border-top: 1px solid #ccc;
-    margin: 20px 0;
-  }
-  
+.user-list li {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user-list .username {
+  margin: 0;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.user-list .follow-btn {
+  background-color: #1da1f2;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.user-list .follow-btn:hover {
+  background-color: #0c86c4;
+}
+
+.follow-button {
+  background-color: #1da1f2;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.follow-button:hover {
+  background-color: #0c86c4;
+}
+
+.tweet-container {
+  padding: 10px;
+}
+
+.usernameT {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.textT {
+  margin-bottom: 5px;
+}
+
+.created_atT {
+  margin-bottom: 5px;
+}
+
+.like-count {
+  margin-bottom: 5px;
+}
+
+.like-button {
+  background-color: #1da1f2;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.like-button:hover {
+  background-color: #0cc42b;
+}
+
+.delete-button {
+  background-color: #f44336;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #c02d22;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 20px 0;
+}
+
+.empty{
+  padding: 20px;
+}
