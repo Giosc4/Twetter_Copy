@@ -92,8 +92,8 @@
         </li>
 
         <li>
-          <table class="followers-table">
-            <form action="profile.php" method="post">
+          <form action="profile.php" method="post">
+            <table class="followers-table">
               <tr>
                 <td>
                   <?php $followers = getMyFollowers($username); ?>
@@ -118,22 +118,29 @@
                   </h3>
                   <?php
                   foreach ($followed as $follow) {
-                      echo '<span class="username">' . $follow['follower_username'] . '</span>';
-                      echo '<button class="unFollow" name="unFollow" value="' . $follow['follower_username'] . '"> Unfollow</button> <hr>';
+                    echo '<span class="username">' . $follow['follower_username'] . '</span>';
+                    echo '<button class="unFollow" name="unFollow" value="' . $follow['follower_username'] . '"> Unfollow</button> <hr>';
                   }
                   ?>
 
                 </td>
               </tr>
-              <?php
-              if (isset($_POST['unFollow'])) {
-                $unFollow = $_POST['unFollow'];
-                echo $unFollow;
-                removeFriend($username, $unFollow);
-              }
-              ?>
-            </form>
-          </table>
+
+            </table>
+
+
+          </form>
+          <?php
+          
+          if (isset($_POST['unFollow'])) {
+            $unFollow = $_POST['unFollow'];
+            removeFriend($username, $unFollow);
+            header("Refresh:0");
+
+          }
+
+          ?>
+
         </li>
         <br>
         <li>

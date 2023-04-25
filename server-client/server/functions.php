@@ -332,7 +332,7 @@ function addFriend($user, $friend_username)
     $result = $conn->query($sql);
 
     if ($result) {
-        echo "Follow deleted!";
+        echo "Follow Added!";
     } else {
         echo "Error: " . $conn->error;
     }
@@ -341,18 +341,14 @@ function addFriend($user, $friend_username)
 
 function removeFriend($user, $friend_username){
     include("../server/db.php");
-    echo $user;
-    echo $friend_username;
     $sql = "DELETE FROM follows WHERE username = '$user' AND follower_username = '$friend_username'";
     $result = $conn->query($sql);
 
-    if ($result) {
-        echo "Follow deleted!";
+    if (!$result)  {
+        echo  "Error: " . $conn->error;
         header('Location: ../client/home.php');
-    } else {
-        echo "Error: " . $conn->error;
+
     }
-    $conn->close();
 }
 
 function searchBar_user($request)

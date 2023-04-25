@@ -44,7 +44,7 @@ include("../server/functions.php");
     $password = $_POST['password'];
 
     $resutl = getLogin($username, $password);
-    if ($resutl == true) {
+    if ($resutl === true) {
         header('Location: home.php');
         exit;
     } else {
