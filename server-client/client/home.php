@@ -103,9 +103,9 @@
                     </div>
                 </section>
             </div>
-            <?php include("../server/footer.php"); ?>
         </form>
     </main>
+    <?php include("../server/footer.php"); ?>
 </body>
 
 </html>

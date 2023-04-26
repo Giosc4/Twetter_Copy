@@ -8,6 +8,10 @@
         - footer home
         - controllare bene i follower e following 
         - controllare il UnFOllow
+
+        - search bar 
+            se non seguo un utente e lo cerco, non lo trovo
+            
  -->
 
 
@@ -30,34 +34,37 @@ include("../server/functions.php");
             <form action="../client/login.php" method="post">
                 <br>Username: <input type='text' name='username'><br>
                 <br>Password: <input type='password' name='password'><br>
-                <br><button name='login'>Login</button><br>
-                <br>
-                <hr><button name='createAccount'>Create Account</button><br>
-            </form>
-        </div>
-    </div>
-    <?php include_once("../server/footer.php"); ?>
-</body>
-<?php if (isset($_POST['login'])) {
+                <br><button name='loginBtn'>Login</button>
+                <?php
+                
+if (isset($_POST['loginBtn'])) {
 
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $resutl = getLogin($username, $password);
-    if ($resutl === true) {
-        header('Location: home.php');
-        exit;
-    } else {
-        echo "<p class='errorLogin'> Login fallito <p>";
-        exit;
-    }
-}
+    $results = getLogin($username, $password);
+
+} ?>
+                <br>
+
+                <hr><button name='createAccount'>Create Account</button><br>
+
+            </form>
+        </div>
+
+    </div>
+    <?php include_once("../server/footer.php"); ?>
+
+    <?php
 
 if (isset($_POST['createAccount'])) {
     echo "account ";
     header('Location: register.php');
     exit;
 }
+
 ?>
+</body>
+
 
 </html>

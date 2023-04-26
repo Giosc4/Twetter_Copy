@@ -60,11 +60,11 @@
                 </div>
                 <?php
                 if (isset($_POST['save'])) {
-                  echo $newFirst_name = $_POST['first_name'];
-                  echo $newLast_name = $_POST['last_name'];
-                  echo $newEmail = $_POST['email'];
-                  echo $newPassword = $_POST['password'];
-                  echo $newBio = $_POST['bio'];
+                  $newFirst_name = $_POST['first_name'];
+                  $newLast_name = $_POST['last_name'];
+                  $newEmail = $_POST['email'];
+                  $newPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                  $newBio = $_POST['bio']; 
                   updateDataUtente($newFirst_name, $newLast_name, $newEmail, $username, $newPassword, $newBio);
                 }
 
@@ -98,7 +98,7 @@
                 <td>
                   <?php $followers = getMyFollowers($username); ?>
                   <!-- lista dei follower -->
-                  <h3>I Follow :
+                  <h3>Follow Me:
                     <?php echo count($followers); ?>
                   </h3>
                   <?php
@@ -113,7 +113,7 @@
                   <?php $followed = getMyFollowing($username); ?>
 
                   <!-- lista dei followed   -->
-                  <h3>Follows Me:
+                  <h3>I Follows:
                     <?php echo count($followed); ?>
                   </h3>
                   <?php

@@ -32,32 +32,37 @@ function getDataUtente($user)
 
 }
 
-function updateDataUtente($first_name, $last_name, $email, $user, $password, $bio)
+function updateDataUtente($first_name, $last_name, $email, $user, $pass, $bio)
 {
     include("db.php");
 
-    $sql = "SELECT * FROM users WHERE username = '$user'";
+    $sql = "SELECT * FROM users WHERE username = '$user'";                      
     $result = $conn->query($sql);
-
+ 
     while ($row = $result->fetch_assoc()) {
-        $OLDfirst_name = $row["first_name"];
-
-        $OLDlast_name = $row["last_name"];
-
-        $OLDemail = $row["email"];
-
-        $OLDpassword = $row["password"];
-
-        $OLDbio = $row["bio"];
+        if($first_name == ""){
+            $first_name = $row["first_name"];
+        }
+        if($last_name == ""){
+            $last_name = $row["last_name"];
+        }
+        if($email == ""){
+            $email = $row["email"];
+        }
+        if($password == ""){
+            $password = $row["password"];
+        }
+        if($bio == ""){
+            $bio = $row["bio"];
+        }
     }
 
-    $sql = "UPDATE users SET first_name='$first_name', last_name='$last_name', email='$email', password='$password', bio='$bio' WHERE username='$user'";
-    $result = $conn->query($sql);
 
+    $sql = "UPDATE users SET first_name='$first_name', last_name='$last_name', email='$email', password='$pass', bio='$bio' WHERE username='$user'";
+    $result = $conn->query($sql);
     if (mysqli_affected_rows($conn) > 0) {
         $_SESSION['username'] = $user;
         header('Location: ../client/home.php');
-        exit;
     } else {
         echo "ERRORE: durante l'aggiornamento dei dati";
         exit;
@@ -111,8 +116,8 @@ function addLiketoTweet($user_id, $post_id)
 function getTweetsHome($user)
 {
     include("db.php");
-    $sql =" SELECT t.* FROM tweets t JOIN follows f ON t.username = f.username WHERE f.follower_username = '$user'";
-    // $sql =" SELECT * FROM tweets WHERE username IN (SELECT username FROM follows WHERE follower_username = '$user')";
+    // $sql =" SELECT t.* FROM tweets t JOIN follows f ON t.username = f.username WHERE f.username = '$user'";
+    $sql =" SELECT * FROM tweets WHERE username IN (SELECT follower_username FROM follows WHERE username = '$user')";
     // $sql = "SELECT * FROM tweets WHERE username <> '$user' AND username IN (SELECT follows.username FROM follows WHERE follower_username = '$user')";
     $result = $conn->query($sql);
 
@@ -231,14 +236,11 @@ function getLogin($user, $password)
         if (password_verify($password, $row['password'])) {
             $_SESSION['username'] = $user;
             header('Location: ../client/home.php');
-            exit;
         } else {
             echo 'Password errata';
-            exit;
         }
     } else {
         echo "Username non esistente";
-        exit;
     }
 }
 
@@ -254,7 +256,6 @@ function deleteAccount($user)
         exit;
     } else {
         echo "Errore durante l'eliminazione dell'account";
-        exit;
     }
 }
 function getMyFollowers($user)
@@ -300,8 +301,7 @@ function getUserListHome($user)
     include("db.php");
     $sql = "SELECT username 
             FROM users 
-            WHERE username != '$user' 
-            AND username NOT IN (SELECT username FROM follows WHERE follower_username = '$user') 
+            WHERE username != '$user'  
             AND username NOT IN (SELECT follower_username FROM follows WHERE username = '$user')";
     $result = $conn->query($sql);
 
