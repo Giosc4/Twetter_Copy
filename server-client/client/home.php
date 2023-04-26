@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Twetter Copy Home</title>
+    <title>Twitter Copy Home</title>
     <link rel="stylesheet" href="../server/style/home.css">
 </head>
 
@@ -13,8 +13,6 @@
         header('Location: login.php');
         exit;
     }
-
-
     include("../server/functions.php");
 
     include("../server/header.php");
@@ -36,6 +34,7 @@
                 <?php
                 if (isset($_POST['search'])) {
                     echo "<div class='searchResult'>";
+                    echo "<h2>Search Results:</h2>";
                     $search = $_POST['textInput'];
 
                     if (strpos($search, '@') !== false) {
@@ -80,19 +79,19 @@
                                 $postId = $_POST['likeTweet'];
                                 $user_id = $_SESSION['username'];
                                 addLiketoTweet($user_id, $postId);
-                                echo "like aggiunto";
+                                echo "like added";
                             }
                             ?>
                         </div>
                     </div>
                 </section>
-                <section> <!-- Lista di utenti -->
+                <section>
                     <div class="user-list">
                         <h2>New Users</h2>
                         <?php getUserListHome($username);
                         include("../server/db.php");
 
-                        if ( isset($_POST['newFollow'])) {
+                        if (isset($_POST['newFollow'])) {
                             ob_start();
                             $user_id = $_SESSION['username'];
                             $friend_user = $_POST['userSelected'];

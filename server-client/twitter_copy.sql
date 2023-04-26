@@ -17,10 +17,9 @@ CREATE TABLE follows (
   FOREIGN KEY (follower_username) REFERENCES users(username) ON DELETE CASCADE
 );
 
-
 CREATE TABLE tweets (
   tweet_id int(11) NOT NULL AUTO_INCREMENT,
-  usernamevarchar(255) NOT NULL,
+  username varchar(255) NOT NULL,
   text text NOT NULL,
   created_at timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (tweet_id),

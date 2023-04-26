@@ -4,8 +4,6 @@
 
 <body>
     <header>
-        <!-- <h1>TITOLO DEL SOCIAL</h1> -->
-
         <div class="logo">
             <a href="../client/home.php">
                 <img src="../server/img/OIP.jpeg" alt="Twitter Logo">
@@ -24,15 +22,12 @@
             </form>
         </div>
         <?php if (isset($_POST['logout'])) {
-            // gestisci il click sul pulsante Logout
             session_start();
             session_destroy();
             header('Location: ../client/login.php');
         } ?>
     </header>
 </body>
-
-
 <?php
 
 ?>

@@ -1,10 +1,9 @@
 <head>
     <link rel="stylesheet" href="../server/style/functions.css">
 </head>
-
 <?php
 
-function getDataUtente($user)
+function getUserData($user)
 {
     include("db.php");
 
@@ -32,27 +31,28 @@ function getDataUtente($user)
 
 }
 
-function updateDataUtente($first_name, $last_name, $email, $user, $pass, $bio)
+// è cambiato il nomde da updateDataUtente
+function updateUserData($first_name, $last_name, $email, $user, $pass, $bio)
 {
     include("db.php");
 
-    $sql = "SELECT * FROM users WHERE username = '$user'";                      
+    $sql = "SELECT * FROM users WHERE username = '$user'";
     $result = $conn->query($sql);
- 
+
     while ($row = $result->fetch_assoc()) {
-        if($first_name == ""){
+        if ($first_name == "") {
             $first_name = $row["first_name"];
         }
-        if($last_name == ""){
+        if ($last_name == "") {
             $last_name = $row["last_name"];
         }
-        if($email == ""){
+        if ($email == "") {
             $email = $row["email"];
         }
-        if($password == ""){
+        if ($password == "") {
             $password = $row["password"];
         }
-        if($bio == ""){
+        if ($bio == "") {
             $bio = $row["bio"];
         }
     }
@@ -64,7 +64,7 @@ function updateDataUtente($first_name, $last_name, $email, $user, $pass, $bio)
         $_SESSION['username'] = $user;
         header('Location: ../client/home.php');
     } else {
-        echo "ERRORE: durante l'aggiornamento dei dati";
+        echo "ERROR: during data update";
         exit;
     }
 }
@@ -89,8 +89,6 @@ function isAdmin($user)
     }
 
 }
-
-
 function addLiketoTweet($user_id, $post_id)
 {
     include("db.php");
@@ -117,7 +115,7 @@ function getTweetsHome($user)
 {
     include("db.php");
     // $sql =" SELECT t.* FROM tweets t JOIN follows f ON t.username = f.username WHERE f.username = '$user'";
-    $sql =" SELECT * FROM tweets WHERE username IN (SELECT follower_username FROM follows WHERE username = '$user')";
+    $sql = " SELECT * FROM tweets WHERE username IN (SELECT follower_username FROM follows WHERE username = '$user')";
     // $sql = "SELECT * FROM tweets WHERE username <> '$user' AND username IN (SELECT follows.username FROM follows WHERE follower_username = '$user')";
     $result = $conn->query($sql);
 
@@ -194,7 +192,7 @@ function writeTweetHome($user, $text)
     if (mysqli_affected_rows($conn) > 0) {
         return true;
     } else {
-        echo "ERRORE: durante l'inserimento dei dati ";
+        echo "ERROR: during data insertion";
     }
 }
 
@@ -206,7 +204,7 @@ function registerAccount($email, $user, $password, $first_name, $last_name, $bio
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        echo "ERRORE: Username già esistente ";
+        echo "ERROR: Username already exists";
 
     } else {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
@@ -218,15 +216,13 @@ function registerAccount($email, $user, $password, $first_name, $last_name, $bio
             header('Location: ../client/home.php');
             return true;
         } else {
-            echo "ERRORE: durante l'inserimento dei dati ";
+            echo "ERROR: during data insertion";
         }
     }
 }
-
 function getLogin($user, $password)
 {
     include("db.php");
-
     $query = "SELECT * FROM users WHERE username='$user'";
     $result = $conn->query($query);
 
@@ -237,17 +233,16 @@ function getLogin($user, $password)
             $_SESSION['username'] = $user;
             header('Location: ../client/home.php');
         } else {
-            echo 'Password errata';
+            echo 'Wrong password';
         }
     } else {
-        echo "Username non esistente";
+        echo "Username not found";
     }
 }
 
 function deleteAccount($user)
 {
     include("db.php");
-
     $sql = "DELETE FROM users WHERE username='$user'";
     $result = $conn->query($sql);
     echo $result;
@@ -255,17 +250,16 @@ function deleteAccount($user)
         header('Location: ../client/login.php');
         exit;
     } else {
-        echo "Errore durante l'eliminazione dell'account";
+        echo "Error deleting account";
     }
 }
 function getMyFollowers($user)
 {
     include("db.php");
-
     //    $sql = "SELECT follower_username FROM follows WHERE username = '$user' AND follower_username != '$user'";
 
     $sql = "SELECT * FROM users INNER JOIN follows ON users.username = follows.username WHERE follows.follower_username = '$user'";
-    
+
     $result = $conn->query($sql);
 
     $followers = array();
@@ -282,7 +276,6 @@ function getMyFollowing($user)
     include("db.php");
     $sql = "SELECT * FROM users INNER JOIN follows ON users.username = follows.follower_username WHERE follows.username = '$user'";
     // $sql = "SELECT username FROM follows WHERE follower_username = '$user' AND username != '$user'";
-
     $result = $conn->query($sql);
 
     $followed = array();
@@ -294,43 +287,38 @@ function getMyFollowing($user)
     return $followed;
 }
 
-
-
 function getUserListHome($user)
 {
     include("db.php");
-    $sql = "SELECT username 
-            FROM users 
-            WHERE username != '$user'  
-            AND username NOT IN (SELECT follower_username FROM follows WHERE username = '$user')";
+    $sql = "SELECT username
+FROM users
+WHERE username != '$user'
+AND username NOT IN (SELECT follower_username FROM follows WHERE username = '$user')";
     $result = $conn->query($sql);
-
     if ($result->num_rows > 0) {
 
         echo "<ul>";
         while ($row = $result->fetch_assoc()) {
             echo "<li><span class='username'>" . $row["username"] . "</span><br>";
-            echo "<form action='home.php' method='post'>"; 
-            echo "<input type='hidden' name='userSelected' value='" . $row["username"] . "'>"; 
+            echo "<form action='home.php' method='post'>";
+            echo "<input type='hidden' name='userSelected' value='" . $row["username"] . "'>";
             echo "<button class='follow-button' name='newFollow' type='submit'>Follow</button>";
             echo "</form>";
             echo "</li>";
-            
+
         }
 
         echo "</ul>";
     } else {
-        echo "<p class='NoUsers'>Non ci sono utenti disponibili.</p>";
+        echo "<p class='NoUsers'>No users available.</p>";
     }
 }
-
 
 function addFriend($user, $friend_username)
 {
     include("../server/db.php");
     $sql = "INSERT INTO follows (username, follower_username) VALUES ('$user', '$friend_username')";
     $result = $conn->query($sql);
-
     if ($result) {
         echo "Follow Added!";
     } else {
@@ -339,22 +327,19 @@ function addFriend($user, $friend_username)
     $conn->close();
 }
 
-function removeFriend($user, $friend_username){
+function removeFriend($user, $friend_username)
+{
     include("../server/db.php");
     $sql = "DELETE FROM follows WHERE username = '$user' AND follower_username = '$friend_username'";
     $result = $conn->query($sql);
-
-    if (!$result)  {
-        echo  "Error: " . $conn->error;
+    if (!$result) {
+        echo "Error: " . $conn->error;
         header('Location: ../client/home.php');
-
     }
 }
-
 function searchBar_user($request)
 {
     include("db.php");
-
     $query = mysqli_real_escape_string($conn, $request);
     $sql = "SELECT first_name, last_name, bio, username FROM users WHERE username LIKE '%$query%'";
     $result = $conn->query($sql);
@@ -366,10 +351,9 @@ function searchBar_user($request)
             echo "Bio: " . $row['bio'] . "</p><br>";
         }
     } else {
-        echo "Nessun risultato";
+        echo "No results";
     }
 }
-
 
 function searchBar_tweets($request)
 {
@@ -389,20 +373,20 @@ function searchBar_tweets($request)
             }
         }
     } else {
-        echo "Nessun risultato";
+        echo "No results";
     }
 }
 
-function deleteTweet($tweetId) {
-    include("db.php"); 
-
+function deleteTweet($tweetId)
+{
+    include("db.php");
     $sql = "DELETE FROM tweets WHERE tweet_id = '$tweetId'";
     $result = $conn->query($sql);
 
     if ($result) {
         header('Location: ../client/home.php');
     } else {
-        echo "ERRORE: durante l'eliminazione del tweet";
+        echo "ERROR: while deleting tweet";
     }
 }
 

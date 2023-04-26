@@ -7,9 +7,8 @@
 </head>
 
 <body>
-  <h1>Registrazione utente</h1>
+  <h1>User Registration</h1>
   <form method="post" action="register.php">
-
     <?php
     session_start();
 
@@ -36,7 +35,7 @@
       <label>Bio:</label>
       <input type="text" name="bio"> <br>
 
-      <br><button name='register'> Registrati</button>
+      <br><button name='register'> Register</button>
 
       <hr>
 
@@ -47,7 +46,7 @@
     if (isset($_POST['register'])) {
 
 
-      // Recupero i dati dal form
+      // Retrieve data from the form
       $email = $_POST['email'];
       $username = $_POST['username'];
       $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -58,7 +57,7 @@
       $result = registerAccount($email, $username, $password, $first_name, $last_name, $bio);
 
       if ($result == true) {
-        echo "registrazione avvenuta con successo";
+        echo "Registration successful";
       } else {
         exit();
       }
@@ -70,8 +69,6 @@
       exit();
     }
     ?>
-
-
   </form>
 </body>
 

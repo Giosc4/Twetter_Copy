@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <html>
-
 <!-- 
-    COSE DA FARE:
+    THINGS TO DO:
+        - update User button not working
+        - updateDataUtente not working
+        - home footer
+        - check follower and following functionality 
+        - check Unfollow functionality
+            - search bar 
+        if I don't follow a user and I search for them, I can't find them
+        ----
+        COSE DA FARE:
         - non funziona il pulsante update User
         - updateDataUtente non funziona
         - footer home
@@ -12,16 +20,12 @@
         - search bar 
             se non seguo un utente e lo cerco, non lo trovo
             
- -->
-
-
+-->
 
 <head>
-    <title>Twetter Copy Login</title>
+    <title>Twitter Copy Login</title>
     <link rel="stylesheet" href="../server/style/login.css">
-
 </head>
-
 <?php
 session_start();
 include("../server/functions.php");
@@ -36,15 +40,12 @@ include("../server/functions.php");
                 <br>Password: <input type='password' name='password'><br>
                 <br><button name='loginBtn'>Login</button>
                 <?php
-                
-if (isset($_POST['loginBtn'])) {
+                if (isset($_POST['loginBtn'])) {
+                    $username = $_POST['username'];
+                    $password = $_POST['password'];
 
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    $results = getLogin($username, $password);
-
-} ?>
+                    $results = getLogin($username, $password);
+                } ?>
                 <br>
 
                 <hr><button name='createAccount'>Create Account</button><br>
@@ -56,15 +57,12 @@ if (isset($_POST['loginBtn'])) {
     <?php include_once("../server/footer.php"); ?>
 
     <?php
-
-if (isset($_POST['createAccount'])) {
-    echo "account ";
-    header('Location: register.php');
-    exit;
-}
-
-?>
+    if (isset($_POST['createAccount'])) {
+        echo "account ";
+        header('Location: register.php');
+        exit;
+    }
+    ?>
 </body>
-
 
 </html>

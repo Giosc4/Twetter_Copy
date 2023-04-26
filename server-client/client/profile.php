@@ -2,17 +2,15 @@
 <html>
 
 <head>
-  <title>Twetter Copy Profile</title>
+  <title>Twitter Copy Profile</title>
   <link rel="stylesheet" href="../server/style/profile.css">
 </head>
 
 <body>
-
   <?php
   session_start();
   include_once("../server/functions.php");
   if (!isset($_SESSION['username'])) {
-    // Redirect all'area di login se l'utente non è loggato
     header('Location: login.php');
     exit;
   }
@@ -20,7 +18,6 @@
   ?>
   <div class="wrapper">
     <div class="editMyProfile">
-
       <ul style="list-style-type:none;">
         <li>
           <table>
@@ -31,8 +28,8 @@
                     <?php
                     $username = $_SESSION['username'];
 
-                    $resutl = getDataUtente($username);
-                    if ($resutl != true) {
+                    $results = getUserData($username);
+                    if ($results != true) {
                       header('Location: login.php');
                       exit;
                     }
@@ -54,7 +51,7 @@
                     <input type="password" id="password" name="password">
                     <label>Bio:</label>
                     <textarea id="bio" name="bio"></textarea>
-                    <input type="submit" name='save' value="Salva">
+                    <input type="submit" name='save' value="Save">
 
                   </form>
                 </div>
@@ -64,8 +61,8 @@
                   $newLast_name = $_POST['last_name'];
                   $newEmail = $_POST['email'];
                   $newPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
-                  $newBio = $_POST['bio']; 
-                  updateDataUtente($newFirst_name, $newLast_name, $newEmail, $username, $newPassword, $newBio);
+                  $newBio = $_POST['bio'];
+                  updateUserData($newFirst_name, $newLast_name, $newEmail, $username, $newPassword, $newBio);
                 }
 
                 ?>
@@ -76,7 +73,7 @@
         <br>
         <li>
           <div class="tweet-list">
-            <h2>I miei Tweets</h2>
+            <h2>My Tweets</h2>
             <?php getMyTweets($username);
             if (isset($_POST['deleteTweet'])) {
               $tweetId = $_POST['deleteTweet'];
@@ -91,13 +88,19 @@
           </div>
         </li>
 
+
+
+
+
+
+
         <li>
           <form action="profile.php" method="post">
             <table class="followers-table">
               <tr>
                 <td>
                   <?php $followers = getMyFollowers($username); ?>
-                  <!-- lista dei follower -->
+                  <!-- list of followers -->
                   <h3>Follow Me:
                     <?php echo count($followers); ?>
                   </h3>
@@ -112,8 +115,8 @@
                 <td>
                   <?php $followed = getMyFollowing($username); ?>
 
-                  <!-- lista dei followed   -->
-                  <h3>I Follows:
+                  <!-- list of followed -->
+                  <h3>I Follow:
                     <?php echo count($followed); ?>
                   </h3>
                   <?php
@@ -127,11 +130,8 @@
               </tr>
 
             </table>
-
-
           </form>
           <?php
-          
           if (isset($_POST['unFollow'])) {
             $unFollow = $_POST['unFollow'];
             removeFriend($username, $unFollow);
@@ -155,13 +155,11 @@
             ?>
           </form>
         </li>
-
       </ul>
     </div>
   </div>
   <?php
   include_once("../server/footer.php");
-
   ?>
 
 </body>

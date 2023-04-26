@@ -1,14 +1,14 @@
 <?php
-// Definisci le variabili per la connessione
+// Define variables for the connection
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "twetter_copy";
+$dbname = "twitter_copy";
 
-// Crea la connessione
+// Create the connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Controlla se la connessione è riuscita
+// Check if the connection was successful
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
