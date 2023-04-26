@@ -21,8 +21,8 @@
         session_destroy();
         header('Location: ../client/login.php');
     }
-
     ?>
+
     <main>
         <form action="home.php" method="post">
             <div class="container">
@@ -36,7 +36,6 @@
                     echo "<div class='searchResult'>";
                     echo "<h2>Search Results:</h2>";
                     $search = $_POST['textInput'];
-
                     if (strpos($search, '@') !== false) {
                         $search = str_replace('@', '', $search);
                         searchBar_user($search);
@@ -90,7 +89,6 @@
                         <h2>New Users</h2>
                         <?php getUserListHome($username);
                         include("../server/db.php");
-
                         if (isset($_POST['newFollow'])) {
                             ob_start();
                             $user_id = $_SESSION['username'];

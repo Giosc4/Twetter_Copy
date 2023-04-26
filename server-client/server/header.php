@@ -8,7 +8,6 @@
             <a href="../client/home.php">
                 <img src="../server/img/OIP.jpeg" alt="Twitter Logo">
             </a>
-
         </div>
         <nav>
             <ul>

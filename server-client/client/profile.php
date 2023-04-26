@@ -27,13 +27,11 @@
                   <div class="boxProfile">
                     <?php
                     $username = $_SESSION['username'];
-
                     $results = getUserData($username);
                     if ($results != true) {
                       header('Location: login.php');
                       exit;
                     }
-
                     ?>
                   </div>
                 </div>
@@ -52,7 +50,6 @@
                     <label>Bio:</label>
                     <textarea id="bio" name="bio"></textarea>
                     <input type="submit" name='save' value="Save">
-
                   </form>
                 </div>
                 <?php
@@ -64,7 +61,6 @@
                   $newBio = $_POST['bio'];
                   updateUserData($newFirst_name, $newLast_name, $newEmail, $username, $newPassword, $newBio);
                 }
-
                 ?>
               </td>
             </tr>
@@ -87,20 +83,12 @@
             ?>
           </div>
         </li>
-
-
-
-
-
-
-
         <li>
           <form action="profile.php" method="post">
             <table class="followers-table">
               <tr>
                 <td>
                   <?php $followers = getMyFollowers($username); ?>
-                  <!-- list of followers -->
                   <h3>Follow Me:
                     <?php echo count($followers); ?>
                   </h3>
@@ -114,8 +102,6 @@
                 </td>
                 <td>
                   <?php $followed = getMyFollowing($username); ?>
-
-                  <!-- list of followed -->
                   <h3>I Follow:
                     <?php echo count($followed); ?>
                   </h3>
@@ -125,10 +111,8 @@
                     echo '<button class="unFollow" name="unFollow" value="' . $follow['follower_username'] . '"> Unfollow</button> <hr>';
                   }
                   ?>
-
                 </td>
               </tr>
-
             </table>
           </form>
           <?php
@@ -136,18 +120,14 @@
             $unFollow = $_POST['unFollow'];
             removeFriend($username, $unFollow);
             header("Refresh:0");
-
           }
-
           ?>
-
         </li>
         <br>
         <li>
           <form action="profile.php" method="post">
             <input type="submit" name="deleteAccount" class="deleteAccount" value="Delete account"
               onclick="return confirm('Are you sure you want to delete your account?')">
-
             <?php
             if (isset($_POST['deleteAccount'])) {
               deleteAccount($username);
@@ -161,7 +141,6 @@
   <?php
   include_once("../server/footer.php");
   ?>
-
 </body>
 
 </html>

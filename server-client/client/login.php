@@ -44,18 +44,15 @@ include("../server/functions.php");
                     $username = $_POST['username'];
                     $password = $_POST['password'];
 
-                    $results = getLogin($username, $password);
+                    getLogin($username, $password);
                 } ?>
                 <br>
 
                 <hr><button name='createAccount'>Create Account</button><br>
-
             </form>
         </div>
-
     </div>
     <?php include_once("../server/footer.php"); ?>
-
     <?php
     if (isset($_POST['createAccount'])) {
         echo "account ";

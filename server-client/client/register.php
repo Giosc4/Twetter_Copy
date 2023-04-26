@@ -16,37 +16,25 @@
     ?>
 
     <div class="registerDiv">
-
       <label>Email:</label>
       <input type="email" name="email">
-
       <label>Username:</label>
       <input type="text" name="username">
-
       <label>Password:</label>
       <input type="password" name="password">
-
       <label>First name:</label>
       <input type="text" name="first_name">
-
       <label>Last name:</label>
       <input type="text" name="last_name">
-
       <label>Bio:</label>
       <input type="text" name="bio"> <br>
-
       <br><button name='register'> Register</button>
-
       <hr>
-
     </div>
-    <button name='login'> Login</button>
 
+    <button name='login'> Login</button>
     <?php
     if (isset($_POST['register'])) {
-
-
-      // Retrieve data from the form
       $email = $_POST['email'];
       $username = $_POST['username'];
       $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -55,7 +43,6 @@
       $bio = $_POST['bio'];
 
       $result = registerAccount($email, $username, $password, $first_name, $last_name, $bio);
-
       if ($result == true) {
         echo "Registration successful";
       } else {

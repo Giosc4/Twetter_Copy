@@ -6,21 +6,17 @@
 function getUserData($user)
 {
     include("db.php");
-
     $sql = "SELECT * FROM users WHERE username = '$user'";
     $result = $conn->query($sql);
-
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             if ($row["username"] == $user) {
-
                 echo "<ul>";
                 echo "<li><strong>Name:</strong> " . $row["first_name"] . "</li>";
                 echo "<li><strong>Surname:</strong> " . $row["last_name"] . "</li>";
                 echo "<li><strong>Email:</strong> " . $row["email"] . "</li>";
                 echo "<li><strong>Bio:</strong> " . $row["bio"] . "</li>";
                 echo "</ul>";
-
                 return true;
             }
         }
@@ -28,17 +24,13 @@ function getUserData($user)
         echo "<p class='empty'>0 results</p>";
         return false;
     }
-
 }
 
-// è cambiato il nomde da updateDataUtente
 function updateUserData($first_name, $last_name, $email, $user, $pass, $bio)
 {
     include("db.php");
-
     $sql = "SELECT * FROM users WHERE username = '$user'";
     $result = $conn->query($sql);
-
     while ($row = $result->fetch_assoc()) {
         if ($first_name == "") {
             $first_name = $row["first_name"];
@@ -56,8 +48,6 @@ function updateUserData($first_name, $last_name, $email, $user, $pass, $bio)
             $bio = $row["bio"];
         }
     }
-
-
     $sql = "UPDATE users SET first_name='$first_name', last_name='$last_name', email='$email', password='$pass', bio='$bio' WHERE username='$user'";
     $result = $conn->query($sql);
     if (mysqli_affected_rows($conn) > 0) {
@@ -69,13 +59,9 @@ function updateUserData($first_name, $last_name, $email, $user, $pass, $bio)
     }
 }
 
-
-
 function isAdmin($user)
 {
     include("db.php");
-
-
     $sql = "SELECT users.isAdmin FROM users WHERE users.username = '$user'";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
@@ -87,46 +73,38 @@ function isAdmin($user)
             }
         }
     }
-
 }
+
 function addLiketoTweet($user_id, $post_id)
 {
     include("db.php");
-
     $likeSql = "SELECT * FROM likes WHERE tweet_id = $post_id AND username = '$user_id'";
     $likeResult = $conn->query($likeSql);
     echo "    .    " . $user_id;
-
     if ($likeResult->num_rows == 0) {
         $insertSql = "INSERT INTO likes (username, tweet_id) VALUES ('$user_id', '$post_id')";
         if ($conn->query($insertSql) === TRUE) {
             echo "Like added successfully.";
             header('Location: ../client/home.php');
-
         } else {
             echo "Error: " . $insertSql . "<br>" . $conn->error;
         }
     } else {
         echo "<p class='empty'>User already liked this tweet</p>";
-
     }
 }
+
 function getTweetsHome($user)
 {
     include("db.php");
-    // $sql =" SELECT t.* FROM tweets t JOIN follows f ON t.username = f.username WHERE f.username = '$user'";
     $sql = " SELECT * FROM tweets WHERE username IN (SELECT follower_username FROM follows WHERE username = '$user')";
-    // $sql = "SELECT * FROM tweets WHERE username <> '$user' AND username IN (SELECT follows.username FROM follows WHERE follower_username = '$user')";
     $result = $conn->query($sql);
-
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-
             $likeSql = "SELECT COUNT(*) as count FROM likes WHERE tweet_id = {$row['tweet_id']}";
             $likeResult = $conn->query($likeSql);
             $likeRow = $likeResult->fetch_assoc();
             $likeCount = $likeRow['count'];
-
             echo "<div class='tweet-container'>";
             echo "<p class='usernameT'>" . "Username: " . $row["username"] . "</p>";
             echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
@@ -149,19 +127,15 @@ function getTweetsHome($user)
 function getMyTweets($user)
 {
     include("db.php");
-
     $sql = "SELECT * FROM tweets WHERE tweets.username = '$user'";
     $result = $conn->query($sql);
-
     $wantDelate;
-
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $likeSql = "SELECT COUNT(*) as count FROM likes WHERE tweet_id = {$row['tweet_id']}";
             $likeResult = $conn->query($likeSql);
             $likeRow = $likeResult->fetch_assoc();
             $likeCount = $likeRow['count'];
-
             echo "<div class='tweet-container'>";
             echo "<p class='usernameT'>" . "Username: " . $row["username"] . "</p>";
             echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
@@ -180,7 +154,6 @@ function getMyTweets($user)
     }
 }
 
-
 function writeTweetHome($user, $text)
 {
     include("db.php");
@@ -188,7 +161,6 @@ function writeTweetHome($user, $text)
     $text = mysqli_real_escape_string($conn, $text);
     $sql = "INSERT INTO tweets (username, text) VALUES ('$user', '$text')";
     $result = $conn->query($sql);
-
     if (mysqli_affected_rows($conn) > 0) {
         return true;
     } else {
@@ -199,18 +171,14 @@ function writeTweetHome($user, $text)
 function registerAccount($email, $user, $password, $first_name, $last_name, $bio)
 {
     include("db.php");
-
     $sql = "SELECT * FROM users WHERE username='$user'";
     $result = $conn->query($sql);
-
     if ($result->num_rows > 0) {
         echo "ERROR: Username already exists";
-
     } else {
         $password_hash = password_hash($password, PASSWORD_DEFAULT);
         $sql = "INSERT INTO users (email, username, password, first_name, last_name, bio) VALUES ('$email', '$user', '$password_hash', '$first_name', '$last_name', '$bio')";
         $result = $conn->query($sql);
-
         if (mysqli_affected_rows($conn) > 0) {
             $_SESSION['username'] = $user;
             header('Location: ../client/home.php');
@@ -225,7 +193,6 @@ function getLogin($user, $password)
     include("db.php");
     $query = "SELECT * FROM users WHERE username='$user'";
     $result = $conn->query($query);
-
     if (mysqli_affected_rows($conn) > 0) {
         $row = $result->fetch_assoc();
 
@@ -256,12 +223,8 @@ function deleteAccount($user)
 function getMyFollowers($user)
 {
     include("db.php");
-    //    $sql = "SELECT follower_username FROM follows WHERE username = '$user' AND follower_username != '$user'";
-
     $sql = "SELECT * FROM users INNER JOIN follows ON users.username = follows.username WHERE follows.follower_username = '$user'";
-
     $result = $conn->query($sql);
-
     $followers = array();
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -275,9 +238,7 @@ function getMyFollowing($user)
 {
     include("db.php");
     $sql = "SELECT * FROM users INNER JOIN follows ON users.username = follows.follower_username WHERE follows.username = '$user'";
-    // $sql = "SELECT username FROM follows WHERE follower_username = '$user' AND username != '$user'";
     $result = $conn->query($sql);
-
     $followed = array();
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -290,13 +251,9 @@ function getMyFollowing($user)
 function getUserListHome($user)
 {
     include("db.php");
-    $sql = "SELECT username
-FROM users
-WHERE username != '$user'
-AND username NOT IN (SELECT follower_username FROM follows WHERE username = '$user')";
+    $sql = "SELECT username FROM users WHERE username != '$user' AND username NOT IN (SELECT follower_username FROM follows WHERE username = '$user')";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
-
         echo "<ul>";
         while ($row = $result->fetch_assoc()) {
             echo "<li><span class='username'>" . $row["username"] . "</span><br>";
@@ -305,9 +262,7 @@ AND username NOT IN (SELECT follower_username FROM follows WHERE username = '$us
             echo "<button class='follow-button' name='newFollow' type='submit'>Follow</button>";
             echo "</form>";
             echo "</li>";
-
         }
-
         echo "</ul>";
     } else {
         echo "<p class='NoUsers'>No users available.</p>";
@@ -337,18 +292,20 @@ function removeFriend($user, $friend_username)
         header('Location: ../client/home.php');
     }
 }
+
 function searchBar_user($request)
 {
     include("db.php");
     $query = mysqli_real_escape_string($conn, $request);
-    $sql = "SELECT first_name, last_name, bio, username FROM users WHERE username LIKE '%$query%'";
+    $sql = "SELECT * FROM users WHERE username LIKE '%$query%'";
     $result = $conn->query($sql);
-
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             echo "<p class='username_name'>Username: " . $row['username'] . "</p><br>";
             echo "<p class='username'>Name: " . $row['first_name'] . "<br>Surname: " . $row['last_name'] . "<br>";
+            echo "Email: " . $row['email'] . "<br>";
             echo "Bio: " . $row['bio'] . "</p><br>";
+            
         }
     } else {
         echo "No results";
@@ -358,16 +315,12 @@ function searchBar_user($request)
 function searchBar_tweets($request)
 {
     include("db.php");
-
     $query = mysqli_real_escape_string($conn, $request);
     $sql = "SELECT u.username, t.text FROM users u LEFT JOIN tweets t ON u.username = t.username WHERE u.username LIKE '%$query%' OR t.text LIKE CONCAT('%', '%$query%', '%') ";
     $result = $conn->query($sql);
-
     if ($result->num_rows > 0) {
-
         while ($row = $result->fetch_assoc()) {
             if (stripos($row['text'], $request) !== false) {
-
                 echo "<p class='username_name'>Username: " . $row['username'] . "</p>";
                 echo "<p class='tweet_text'>Tweets: " . $row['text'] . "</p><br>";
             }
@@ -382,12 +335,10 @@ function deleteTweet($tweetId)
     include("db.php");
     $sql = "DELETE FROM tweets WHERE tweet_id = '$tweetId'";
     $result = $conn->query($sql);
-
     if ($result) {
         header('Location: ../client/home.php');
     } else {
         echo "ERROR: while deleting tweet";
     }
 }
-
 ?>
