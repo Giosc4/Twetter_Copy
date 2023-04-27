@@ -25,31 +25,30 @@ function getUserData($user)
         return false;
     }
 }
-
 function updateUserData($first_name, $last_name, $email, $user, $pass, $bio)
 {
     include("db.php");
-    $sql = "SELECT * FROM users WHERE username = '$user'";
-    $result = $conn->query($sql);
-    while ($row = $result->fetch_assoc()) {
-        if ($first_name == "") {
-            $first_name = $row["first_name"];
-        }
-        if ($last_name == "") {
-            $last_name = $row["last_name"];
-        }
-        if ($email == "") {
-            $email = $row["email"];
-        }
-        if ($password == "") {
-            $password = $row["password"];
-        }
-        if ($bio == "") {
-            $bio = $row["bio"];
-        }
+
+    $first_name = mysqli_real_escape_string($conn, $first_name);
+    $last_name = mysqli_real_escape_string($conn, $last_name);
+    $email = mysqli_real_escape_string($conn, $email);
+    $bio = mysqli_real_escape_string($conn, $bio);
+
+    $getUserData = "SELECT first_name, last_name, email, password, bio FROM users WHERE username='$user'";
+    $userDataResult = $conn->query($getUserData);
+    $currentData = mysqli_fetch_assoc($userDataResult);
+
+    if (!empty($pass)) {
+        $pass = mysqli_real_escape_string($conn, $pass);
+        $pass = password_hash($pass, PASSWORD_DEFAULT);
+    } else {
+        $pass = $currentData['password'];
     }
-    $sql = "UPDATE users SET first_name='$first_name', last_name='$last_name', email='$email', password='$pass', bio='$bio' WHERE username='$user'";
+
+    $sql = "UPDATE users SET first_name=" . ($first_name !== $currentData['first_name'] && !empty($first_name) ? "'$first_name'" : "first_name") . ", last_name=" . ($last_name !== $currentData['last_name'] && !empty($last_name) ? "'$last_name'" : "last_name") . ", email=" . ($email !== $currentData['email'] && !empty($email) ? "'$email'" : "email") . ", password=" . ($pass !== $currentData['password'] && !empty($pass) ? "'$pass'" : "password") . ", bio=" . ($bio !== $currentData['bio'] && !empty($bio) ? "'$bio'" : "bio") . " WHERE username='$user'";
+
     $result = $conn->query($sql);
+
     if (mysqli_affected_rows($conn) > 0) {
         $_SESSION['username'] = $user;
         header('Location: ../client/home.php');
@@ -171,6 +170,7 @@ function writeTweetHome($user, $text)
 function registerAccount($email, $user, $password, $first_name, $last_name, $bio)
 {
     include("db.php");
+
     $sql = "SELECT * FROM users WHERE username='$user'";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
@@ -190,10 +190,11 @@ function registerAccount($email, $user, $password, $first_name, $last_name, $bio
 }
 function getLogin($user, $password)
 {
+    //errore entra anche con la password sbagliata
     include("db.php");
     $query = "SELECT * FROM users WHERE username='$user'";
     $result = $conn->query($query);
-    if (mysqli_affected_rows($conn) > 0) {
+    if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
 
         if (password_verify($password, $row['password'])) {
@@ -206,6 +207,7 @@ function getLogin($user, $password)
         echo "Username not found";
     }
 }
+
 
 function deleteAccount($user)
 {
