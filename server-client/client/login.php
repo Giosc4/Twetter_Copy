@@ -41,10 +41,11 @@ include("../server/functions.php");
                 <br><button name='loginBtn'>Login</button>
                 <?php
                 if (isset($_POST['loginBtn'])) {
-                    $username = $_POST['username'];
-                    $password = $_POST['password'];
+                    $user = $_POST['username'];
+                    $psw = $_POST['password'];
 
-                    getLogin($username, $password);
+                    getLogin($user, $psw);
+                    
                 } ?>
                 <br>
 

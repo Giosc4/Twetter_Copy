@@ -37,12 +37,12 @@
     if (isset($_POST['register'])) {
       $email = $_POST['email'];
       $username = $_POST['username'];
-      $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+      $hashPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
       $first_name = $_POST['first_name'];
       $last_name = $_POST['last_name'];
       $bio = $_POST['bio'];
 
-      $result = registerAccount($email, $username, $password, $first_name, $last_name, $bio);
+      $result = registerAccount($email, $username, $hashPassword, $first_name, $last_name, $bio);
       if ($result == true) {
         echo "Registration successful";
       } else {

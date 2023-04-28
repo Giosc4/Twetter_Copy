@@ -57,9 +57,9 @@
                   $newFirst_name = $_POST['first_name'];
                   $newLast_name = $_POST['last_name'];
                   $newEmail = $_POST['email'];
-                  $password = $_POST['password'];
+                  $hashPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
                   $newBio = $_POST['bio'];
-                  updateUserData($newFirst_name, $newLast_name, $newEmail, $username, $newPassword, $newBio);
+                  updateUserData($newFirst_name, $newLast_name, $newEmail, $username, $hashPassword, $newBio);
                 }
                 ?>
               </td>

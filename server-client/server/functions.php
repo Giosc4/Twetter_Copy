@@ -40,7 +40,6 @@ function updateUserData($first_name, $last_name, $email, $user, $pass, $bio)
 
     if (!empty($pass)) {
         $pass = mysqli_real_escape_string($conn, $pass);
-        $pass = password_hash($pass, PASSWORD_DEFAULT);
     } else {
         $pass = $currentData['password'];
     }
@@ -167,7 +166,7 @@ function writeTweetHome($user, $text)
     }
 }
 
-function registerAccount($email, $user, $password, $first_name, $last_name, $bio)
+function registerAccount($email, $user, $hashPassword, $first_name, $last_name, $bio)
 {
     include("db.php");
 
@@ -176,8 +175,7 @@ function registerAccount($email, $user, $password, $first_name, $last_name, $bio
     if ($result->num_rows > 0) {
         echo "ERROR: Username already exists";
     } else {
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO users (email, username, password, first_name, last_name, bio) VALUES ('$email', '$user', '$password_hash', '$first_name', '$last_name', '$bio')";
+        $sql = "INSERT INTO users (email, username, password, first_name, last_name, bio) VALUES ('$email', '$user', '$hashPassword', '$first_name', '$last_name', '$bio')";
         $result = $conn->query($sql);
         if (mysqli_affected_rows($conn) > 0) {
             $_SESSION['username'] = $user;
@@ -188,18 +186,19 @@ function registerAccount($email, $user, $password, $first_name, $last_name, $bio
         }
     }
 }
-function getLogin($user, $password)
-{
-    //errore entra anche con la password sbagliata
+function getLogin($user, $psw) {
     include("db.php");
     $query = "SELECT * FROM users WHERE username='$user'";
     $result = $conn->query($query);
+
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
+        $hash = $row['password'];
 
-        if (password_verify($password, $row['password'])) {
+        if (password_verify($psw, $hash)) {
             $_SESSION['username'] = $user;
             header('Location: ../client/home.php');
+            exit();
         } else {
             echo 'Wrong password';
         }
