@@ -74,6 +74,10 @@
                                 $tweetId = $_POST['deleteTweet'];
                                 deleteTweet($tweetId);
                             }
+                            if(isset($_POST["profileUser"])) {
+                                $profileUser = $_POST["profileUser"];
+                                header("Location: ../client/profileF.php?user=$profileUser");
+                            }
                             if (isset($_POST['likeTweet'])) {
                                 $postId = $_POST['likeTweet'];
                                 $user_id = $_SESSION['username'];
@@ -88,9 +92,7 @@
                     <div class="user-list">
                         <h2>New Users</h2>
                         <?php getUserListHome($username);
-                        include("../server/db.php");
                         if (isset($_POST['newFollow'])) {
-                            ob_start();
                             $user_id = $_SESSION['username'];
                             $friend_user = $_POST['userSelected'];
                             addFriend($user_id, $friend_user);

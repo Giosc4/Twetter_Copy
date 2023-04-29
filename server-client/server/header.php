@@ -12,7 +12,7 @@
         <nav>
             <ul>
                 <li><a href="../client/home.php">Home</a></li>
-                <li><a href="../client/profile.php">Profile</a></li>
+                <li><a href="../client/myProfile.php">Profile</a></li>
             </ul>
         </nav>
         <div class="profile">

@@ -208,6 +208,18 @@ section {
   margin-bottom: 5px;
 }
 
+.buttonUser{
+  padding: 5px;
+  background-color: #61baf2;
+  color: #fff;
+  border: 0;
+
+
+}
+.buttonUser:hover {
+  background-color: #0c86c4;
+}
+
 .textT {
   margin-bottom: 5px;
 }

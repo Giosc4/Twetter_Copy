@@ -220,7 +220,11 @@ body {
     margin-right: 10px;
     cursor: pointer;
   }
-  
+
+  .like-button:hover {
+    background-color: #0cc42b;
+  }
+
   .delete-button {
     background-color: #f44336;
     border: none;
@@ -242,4 +246,37 @@ body {
   
 .empty{
   padding: 20px;
+}
+
+.countFollow{
+  padding: 20px;
+  border-top: 1px solid black;
+
+}
+
+.follow-button{
+  margin: 20px;
+  background-color: #1da1f2;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.userButton{
+  margin: 20px;
+  background-color: #1da1f2;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 10px;
 }

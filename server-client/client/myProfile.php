@@ -20,6 +20,11 @@
     <div class="editMyProfile">
       <ul style="list-style-type:none;">
         <li>
+          <h1>USER:
+            <?php echo $_SESSION['username']; ?>
+          </h1>
+        </li>
+        <li>
           <table>
             <tr>
               <td>
@@ -38,7 +43,7 @@
               </td>
               <td>
                 <div class="profile-edit">
-                  <form action="profile.php" method="post">
+                  <form action="myProfile.php" method="post">
                     <label>Name:</label>
                     <input type="text" id="first_name" name="first_name">
                     <label>Surname:</label>
@@ -57,9 +62,19 @@
                   $newFirst_name = $_POST['first_name'];
                   $newLast_name = $_POST['last_name'];
                   $newEmail = $_POST['email'];
-                  $hashPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+                  $pass = $_POST['password'];
                   $newBio = $_POST['bio'];
-                  updateUserData($newFirst_name, $newLast_name, $newEmail, $username, $hashPassword, $newBio);
+
+                  if (empty($newFirst_name) && empty($newLast_name) && empty($newEmail) && empty($newBio) && empty($pass)) {
+                    echo "Please fill in all fields";
+                  } else {
+                    if (!empty($pass)) {
+                      $hashPassword = password_hash($pass, PASSWORD_DEFAULT);
+                    } else {
+                      $hashPassword = "";
+                    }
+                    updateUserData($newFirst_name, $newLast_name, $newEmail, $username, $hashPassword, $newBio);
+                  }
                 }
                 ?>
               </td>
@@ -84,7 +99,7 @@
           </div>
         </li>
         <li>
-          <form action="profile.php" method="post">
+          <form action="myProfile.php" method="post">
             <table class="followers-table">
               <tr>
                 <td>
@@ -94,8 +109,9 @@
                   </h3>
                   <?php
                   foreach ($followers as $follow) {
-                    echo '<span class="username">' . $follow['username'] . '</span>';
-                    echo '<button class="unFollow" name="unFollow" value="' . $follow['username'] . '"> Unfollow</button> <hr>';
+                    // echo '<span class="username">' . $follow['username'] . '</span>';
+                    echo "User: <button class='userButton' type='submit' name='profileUser' value='" . $follow["follower_username"] . ">" . $follow["follower_username"] . "</button>";
+                    echo '<button class="unFollow" name="unFollowMe" value="' . $follow['username'] . '"> Unfollow</button> <hr>';
                   }
 
                   ?>
@@ -107,8 +123,9 @@
                   </h3>
                   <?php
                   foreach ($followed as $follow) {
-                    echo '<span class="username">' . $follow['follower_username'] . '</span>';
-                    echo '<button class="unFollow" name="unFollow" value="' . $follow['follower_username'] . '"> Unfollow</button> <hr>';
+                    // echo '<span class="username">' . $follow['follower_username'] . '</span>';
+                    echo "User: <button class='userButton' type='submit' name='profileUser' value='" . $follow["follower_username"] . "' class='buttonUser'>" . $follow["follower_username"] . "</button>";
+                    echo '<button class="unFollow" name="IunFollow" value="' . $follow['follower_username'] . '"> Unfollow</button> <hr>';
                   }
                   ?>
                 </td>
@@ -116,16 +133,25 @@
             </table>
           </form>
           <?php
-          if (isset($_POST['unFollow'])) {
-            $unFollow = $_POST['unFollow'];
+          if (isset($_POST['IunFollow'])) {
+            $unFollow = $_POST['IunFollow'];
             removeFriend($username, $unFollow);
-            header("Refresh:0");
+            header('Location: ../client/myProfile.php');
+          }
+          if (isset($_POST['unFollowMe'])) {
+            $unFollow = $_POST['unFollowMe'];
+            removeFriend($unFollow, $username);
+            header('Location: ../client/myProfile.php');
+          }
+          if (isset($_POST["profileUser"])) {
+            $profileUser = $_POST["profileUser"];
+            header("Location: ../client/profileF.php?user=$profileUser");
           }
           ?>
         </li>
         <br>
         <li>
-          <form action="profile.php" method="post">
+          <form action="myProfile.php" method="post">
             <input type="submit" name="deleteAccount" class="deleteAccount" value="Delete account"
               onclick="return confirm('Are you sure you want to delete your account?')">
             <?php

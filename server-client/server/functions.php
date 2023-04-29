@@ -34,14 +34,15 @@ function updateUserData($first_name, $last_name, $email, $user, $pass, $bio)
     $email = mysqli_real_escape_string($conn, $email);
     $bio = mysqli_real_escape_string($conn, $bio);
 
-    $getUserData = "SELECT first_name, last_name, email, password, bio FROM users WHERE username='$user'";
-    $userDataResult = $conn->query($getUserData);
-    $currentData = mysqli_fetch_assoc($userDataResult);
+    $getUserData = "SELECT * FROM users WHERE username='$user'";
+    $sql = $conn->query($getUserData);
+    $currentData = mysqli_fetch_assoc($sql);
 
     if (!empty($pass)) {
         $pass = mysqli_real_escape_string($conn, $pass);
     } else {
         $pass = $currentData['password'];
+
     }
 
     $sql = "UPDATE users SET first_name=" . ($first_name !== $currentData['first_name'] && !empty($first_name) ? "'$first_name'" : "first_name") . ", last_name=" . ($last_name !== $currentData['last_name'] && !empty($last_name) ? "'$last_name'" : "last_name") . ", email=" . ($email !== $currentData['email'] && !empty($email) ? "'$email'" : "email") . ", password=" . ($pass !== $currentData['password'] && !empty($pass) ? "'$pass'" : "password") . ", bio=" . ($bio !== $currentData['bio'] && !empty($bio) ? "'$bio'" : "bio") . " WHERE username='$user'";
@@ -104,7 +105,7 @@ function getTweetsHome($user)
             $likeRow = $likeResult->fetch_assoc();
             $likeCount = $likeRow['count'];
             echo "<div class='tweet-container'>";
-            echo "<p class='usernameT'>" . "Username: " . $row["username"] . "</p>";
+            echo "<p class='usernameT'>" . "Username: <button type='submit' name='profileUser' value='" . $row["username"] . "' class='buttonUser'>" . $row["username"] . "</button></p>";
             echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
             echo "<p class='created_atT'>" . "Created At: " . $row["created_at"] . "</p>";
             echo "<p class='like-count'>" . "Likes: " . $likeCount . "</p>";
@@ -139,7 +140,7 @@ function getMyTweets($user)
             echo "<p class='textT'>" . "Text: " . $row["text"] . "</p>";
             echo "<p class='created_atT'>" . "Created At: " . $row["created_at"] . "</p>";
             echo "<p class='like-count'>" . "Likes: " . $likeCount . "</p>";
-            echo "<form action='profile.php' method='post'>";
+            echo "<form action='myProfile.php' method='post'>";
             echo "<button type='submit' class='like-button' name='likeTweet' value='" . $row['tweet_id'] . "'>Like</button>";
             if (isAdmin($user)) {
                 echo "<button type='submit' class='delete-button' name='deleteTweet' value='" . $row['tweet_id'] . "'>Delete</button>";
@@ -186,7 +187,8 @@ function registerAccount($email, $user, $hashPassword, $first_name, $last_name, 
         }
     }
 }
-function getLogin($user, $psw) {
+function getLogin($user, $psw)
+{
     include("db.php");
     $query = "SELECT * FROM users WHERE username='$user'";
     $result = $conn->query($query);
@@ -235,6 +237,16 @@ function getMyFollowers($user)
     return $followers;
 }
 
+function isFollowed($user, $userFriend){
+    include("db.php");
+    $sql = "SELECT follower_username FROM users INNER JOIN follows ON users.username = follows.follower_username WHERE follows.username = '$user'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        return true;
+    }
+    return false;
+}
+
 function getMyFollowing($user)
 {
     include("db.php");
@@ -257,7 +269,8 @@ function getUserListHome($user)
     if ($result->num_rows > 0) {
         echo "<ul>";
         while ($row = $result->fetch_assoc()) {
-            echo "<li><span class='username'>" . $row["username"] . "</span><br>";
+            echo "<li>";
+            echo "<p class='usernameT'>" . "Username: <button type='submit' name='profileUser' value='" . $row["username"] . "' class='buttonUser'>" . $row["username"] . "</button></p>";
             echo "<form action='home.php' method='post'>";
             echo "<input type='hidden' name='userSelected' value='" . $row["username"] . "'>";
             echo "<button class='follow-button' name='newFollow' type='submit'>Follow</button>";
@@ -285,12 +298,14 @@ function addFriend($user, $friend_username)
 
 function removeFriend($user, $friend_username)
 {
+    echo $user;
+    echo $friend_username;
     include("../server/db.php");
     $sql = "DELETE FROM follows WHERE username = '$user' AND follower_username = '$friend_username'";
-    $result = $conn->query($sql);
-    if (!$result) {
+    if (!$conn->query($sql)) {
         echo "Error: " . $conn->error;
-        header('Location: ../client/home.php');
+    } else {
+        echo "Follow Removed!";
     }
 }
 
@@ -306,7 +321,7 @@ function searchBar_user($request)
             echo "<p class='username'>Name: " . $row['first_name'] . "<br>Surname: " . $row['last_name'] . "<br>";
             echo "Email: " . $row['email'] . "<br>";
             echo "Bio: " . $row['bio'] . "</p><br>";
-            
+
         }
     } else {
         echo "No results";
