@@ -86,7 +86,7 @@ function addLiketoTweet($user_id, $post_id)
             echo "Like added successfully.";
             header('Location: ../client/home.php');
         } else {
-            echo "Error: " . $insertSql . "<br>" . $conn->error;
+            echo "Error ";
         }
     } else {
         echo "<p class='empty'>User already liked this tweet</p>";
@@ -291,7 +291,7 @@ function addFriend($user, $friend_username)
     if ($result) {
         echo "Follow Added!";
     } else {
-        echo "Error: " . $conn->error;
+        echo "Error: adding follow";
     }
     $conn->close();
 }
@@ -303,7 +303,7 @@ function removeFriend($user, $friend_username)
     include("../server/db.php");
     $sql = "DELETE FROM follows WHERE username = '$user' AND follower_username = '$friend_username'";
     if (!$conn->query($sql)) {
-        echo "Error: " . $conn->error;
+        echo "Error: removing follow" ;
     } else {
         echo "Follow Removed!";
     }
