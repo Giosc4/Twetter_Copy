@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "twitter_copy";
+$dbname = "(database name)";
 
 // Create the connection
 $conn = new mysqli($servername, $username, $password, $dbname);

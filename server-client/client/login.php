@@ -1,27 +1,5 @@
 <!DOCTYPE html>
 <html>
-<!-- 
-    THINGS TO DO:
-        - update User button not working
-        - updateDataUtente not working
-        - home footer
-        - check follower and following functionality 
-        - check Unfollow functionality
-            - search bar 
-        if I don't follow a user and I search for them, I can't find them
-        ----
-        COSE DA FARE:
-        - non funziona il pulsante update User
-        - updateDataUtente non funziona
-        - footer home
-        - controllare bene i follower e following 
-        - controllare il UnFOllow
-
-        - search bar 
-            se non seguo un utente e lo cerco, non lo trovo
-            
--->
-
 <head>
     <title>Twitter Copy Login</title>
     <link rel="stylesheet" href="../server/style/login.css">

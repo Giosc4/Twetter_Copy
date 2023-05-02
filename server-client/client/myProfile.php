@@ -109,9 +109,9 @@
                   </h3>
                   <?php
                   foreach ($followers as $follow) {
-                    // echo '<span class="username">' . $follow['username'] . '</span>';
-                    echo "User: <button class='userButton' type='submit' name='profileUser' value='" . $follow["follower_username"] . ">" . $follow["follower_username"] . "</button>";
-                    echo '<button class="unFollow" name="unFollowMe" value="' . $follow['username'] . '"> Unfollow</button> <hr>';
+                    $follow_user = $follow['follower_username'];
+                    echo "User: <button class='userButton' type='submit' name='profileUser' value='" . $follow_user . "' >" . $follow_user . "</button>";
+                    echo "<button class='unFollow' name='IunFollow' value='" . $follow_user . "'> Unfollow</button> <hr>";
                   }
 
                   ?>
@@ -123,9 +123,9 @@
                   </h3>
                   <?php
                   foreach ($followed as $follow) {
-                    // echo '<span class="username">' . $follow['follower_username'] . '</span>';
-                    echo "User: <button class='userButton' type='submit' name='profileUser' value='" . $follow["follower_username"] . "' class='buttonUser'>" . $follow["follower_username"] . "</button>";
-                    echo '<button class="unFollow" name="IunFollow" value="' . $follow['follower_username'] . '"> Unfollow</button> <hr>';
+                    $follow_user = $follow['follower_username'];
+                    echo "User: <button class='userButton' type='submit' name='profileUser' value='" . $follow_user . "' >" . $follow_user . "</button>";
+                    echo "<button class='unFollow' name='IunFollow' value='" . $follow_user . "'> Unfollow</button> <hr>";
                   }
                   ?>
                 </td>
